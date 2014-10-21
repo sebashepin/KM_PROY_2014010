@@ -1,0 +1,6 @@
+String[] getUsers()
+boolean authUser(String user, int pHash)
+String[] getQuestionCandidates(String question)
+String[] getAnswers(int questionId)
+boolean rateAnswer(int answerId, int questionId, int rating)
+boolean addStep(int questionId, int previousStepId, String stepDescription)
