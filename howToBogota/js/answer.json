@@ -1,0 +1,27 @@
+// Json Document
+
+// Parameters
+{
+	"user":"adsfasdfasdf",
+	"question":"Am I a question?"
+}
+
+// Respuesta encontrada
+{
+	"status": "OK" ,
+	"step":{
+		"step_id":  "1",
+		"step_description":"I am a step",
+        "steps_neighborhood": "1110"
+	}
+}
+
+// La pregunta es nueva y válida
+{
+	"status": "NEW"
+}
+
+// La pregunta es inválida
+{
+	"status": "INVALID"
+}
