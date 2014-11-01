@@ -38,7 +38,6 @@ html, .ui-overlay-a, .ui-page-theme-a, .ui-page-theme-a .ui-panel-wrapper {
 
 .ui-bar-a, .ui-page-theme-a .ui-bar-inherit, html .ui-bar-a .ui-bar-inherit, html .ui-body-a .ui-bar-inherit, html body .ui-group-theme-a .ui-bar-inherit {
 	background-color: rgba(255,255,255,0.15); /*{a-bar-background-color}*/
-	;
 	border: none;
 	margin-top: 3%;
 }
@@ -141,9 +140,9 @@ h1, h2, h3, h4, h5, h6 {
 	color: #c09fcc;
 }
 
-#askQuestion:link, #askQuestion:visited {
+#askQuestion:link, #askQuestion:visited, .botonPreguntaGrande:link, .botonPreguntaGrande:visited {
 	background-color: #54285a;
-	color: #FFF;
+	color: #FFF !important;
 	display: block;
 	clear: both;
 	width: 100px;
@@ -154,8 +153,24 @@ h1, h2, h3, h4, h5, h6 {
 	margin: 70px auto 0 auto;
 }
 
-#askQuestion:hover { background-color: #353a70; }
+#askQuestion:hover, #askQuestion:active, .botonPreguntaGrande:hover, .botonPreguntaGrande:active { background-color: #353a70; }
 
+.alLado{
+	display:block;
+	clear:none !important;
+	float:left !important;
+	margin:0 5% 0 0 !important;
+	
+}
+
+
+#botonera{
+	display:block;
+	clear:none;
+	float:left;
+	width:100%;
+	
+}
 /******************Estilos Respuesta***************************/
 #respuesta #contenidoPrincipal { margin-top: 10%; }
 
@@ -293,7 +308,7 @@ div#pasosPregunta > div{
 	display:block;
 	clear:none;
 	float:left;
-	width:86%;
+	width:80%;
 	margin-top:13px;
 	
 }
@@ -323,7 +338,7 @@ div#pasosPregunta > div{
 	display:block;
 	clear:none;
 	float:left;
-	width:60%;
+	width:45%;
 	
 }
 #responderPregunta #botonesPasos .ui-btn{
@@ -431,6 +446,14 @@ html, .ui-overlay-a, .ui-page-theme-a, .ui-page-theme-a .ui-panel-wrapper {
 	width: 48%;
 	margin-left:2%;
 	margin-top:5%;
+}
+
+.alLado{
+	display:block;
+	clear:none !important;
+	float:left !important;
+	margin:0 5% 0 0 !important;
+	
 }
 
 /******************Estilos Crear Pregunta***************************/
