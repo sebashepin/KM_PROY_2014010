@@ -5,6 +5,6 @@
 	"step":{
 		"step_id":  "1",
 		"step_description":"I am a step",
-        "steps_neighborhood": "0100"
+        "steps_neighborhood": "1111"
 	}
 }
