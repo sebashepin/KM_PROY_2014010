@@ -1,6 +1,6 @@
 $(document).ready(function() {
-    
-          $.getJSON('http://192.168.0.19:8080/JAXRS-RESTEasy/rest/RESTEasyHelloWorld/answer', function(respuesta) {
+    	//$.getJSON('http://25.141.65.84:8080/JAXRS-RESTEasy/rest/RESTEasyHelloWorld/answer', function(respuesta) {
+          $.getJSON('js/answer3.json', function(respuesta) {
 			  $('#respuesta .contenedor #contenidoPrincipal').html('<div id="lapregunta"><p class="morados">You wrote</p><p id="howto">How To....</p><p id="questionASked">'+ respuesta.question + '</p></div>');
 			  if(respuesta.status == "OK"){
 				$('#respuesta .contenedor #contenidoPrincipal').append('<div id="lasrespuestas"><div class="swiper-container"><div class="swiper-wrapper"><div class="swiper-slide">');

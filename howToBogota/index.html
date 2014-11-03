@@ -20,6 +20,7 @@
 <link rel="stylesheet" type="text/css" href="css/idangerous.swiper.css">
 <script src="js/idangerous.swiper.min.js"></script>
 <script src="js/createSteps.js"></script>
+<script src="js/uploadData.js"></script>
 </head>
 <body>
 <div data-role="page" id="inicio">
@@ -43,14 +44,18 @@
   <div data-role="content">
     <div class="contenedor clearfix">
       <div id="contenidoPrincipal">
-        <form id="ask">
+        <form id="askQuestionForm">
           <h3 class="lobster">How To...</h3>
-          <input name="question" type="text" id="question" form="ask" placeholder="Ask Here">
+          <input type="text" name="question"  id="question" placeholder="Ask Here">
           <p id="enBogota">...in Bogotá<span>?</span></p>
+          <div id="enviarPHP">
+          <input type='submit' value='Enviar a PHP'/>
+          </div>
           <a href="#respuesta" id="askQuestion">ASK</a> 
           <!--<input name="LOGIN" type="button" id="LOGIN" title="LOGIN" value="LOGIN">-->
           
         </form>
+        <div class="printResults"></div>
       </div>
     </div>
   </div>
@@ -111,17 +116,19 @@
   <div data-role="content">
     <div class="contenedor clearfix">
       <div id="contenidoPrincipal">
+      <form id="createQuestionForm">
         <div id="preguntaCreada">
-          <form id="createQuestion">
+          
             <h3 class="lobster">How To...</h3>
-            <input name="questionCreated" type="text" id="questionCreated" form="createQuestion" placeholder="Write Here...">
+           
+            <input type="text" name="questionCreated" id="questionCreated" placeholder="Write Here...">
             <p id="enBogota">...in Bogotá<span>?</span></p>
-          </form>
+          
         </div>
         <div id='pasosPregunta'>
           <div id="divStep1">
             <label><span class="textoPAso">STEP</span> <span class="numeroPaso">1</span></label>
-            <input type='textbox' id='step1' >
+            <input type='textbox' id='step1' name='step1'>
           </div>
         </div>
         <div id="botonesPasos">
@@ -131,8 +138,11 @@
         </div>
         <div id="botonCrear">
         <input type='button' value='Create' id='createAnswer'>
+        <input type='submit' value='Enviar a PHP'/>
         </div>
+        </form>
       </div>
+      <div class="printResults"></div>
     </div>
   </div>
   

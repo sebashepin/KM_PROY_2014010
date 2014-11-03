@@ -5,7 +5,7 @@ $(document).ready(function(){
     $("#crearPaso").click(function () {
  
 	if(counter>10){
-            alert("Only 10 textboxes allow");
+            alert("Only 10 steps are allowed");
             return false;
 	}   
  
