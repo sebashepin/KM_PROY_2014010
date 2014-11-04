@@ -17,7 +17,7 @@ import co.uniandes.howtobogota.engine.KnowledgeEngine;
 import co.uniandes.howtobogota.engine.KnowledgeEngine.STEP_NEIGHBOR;
 
 @Path("/HowToBogota")
-public class RESTEasyHelloWorldService {
+public class WSEndpoint {
 
   @GET
   @Path("/test/{pathParameter}")
