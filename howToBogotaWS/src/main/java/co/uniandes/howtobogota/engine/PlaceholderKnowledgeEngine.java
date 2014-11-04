@@ -158,4 +158,17 @@ public class PlaceholderKnowledgeEngine implements KnowledgeEngine {
   }
 
 
+  @Override
+  public boolean createAndAnswerQuestion(String question, Object[] steps) {
+    if(!createQuestion(question))
+      return false;
+    String stepId = addFirstStep(question, (String) steps[0]);
+    for (int i = 1; i < steps.length; i++) {
+      stepId = addStep(stepId, null,(String)steps[i]);
+    }
+    
+    return true;
+  }
+
+
 }
