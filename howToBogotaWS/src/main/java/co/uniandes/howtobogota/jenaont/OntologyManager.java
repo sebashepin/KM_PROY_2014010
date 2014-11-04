@@ -203,7 +203,7 @@ public class OntologyManager {
 		TDB.sync(dataset);
 	}
 	
-	public void agregarRespuesta(String idRespuesta, String idPregunta, ArrayList<String> pasos,  ArrayList<String>verbos, 
+	public void agregarRespuesta(String idRespuesta, String idPregunta, String[] pasos,  ArrayList<String>verbos, 
 			ArrayList<String> entidades, ArrayList<String>calificativos ){
 		
 		dataset.begin(ReadWrite.WRITE);
@@ -216,9 +216,9 @@ public class OntologyManager {
 		setProperty(res, HowToBogotaProperty.RTA_ASOC_PREGUNTA ,preg);
 		
 		Individual ant=null;
-		for(int i=0; i< pasos.size();i++){
+		for(int i=0; i< pasos.length;i++){
 			
-			String paso= pasos.get(i);
+			String paso= pasos[i];
 			String idPaso=idRespuesta+i;
 			Individual obj2 =createObject(HowToBogotaClass.PASOS, idPaso);
 			
@@ -345,4 +345,62 @@ public class OntologyManager {
 		TDB.sync(dataset);
 		return res;
 	}
+	
+    public String agregarPrimerPaso(String idRespuesta, String idPregunta, String descPaso,  ArrayList<String>verbos, 
+			ArrayList<String> entidades, ArrayList<String>calificativos ){
+		
+		dataset.begin(ReadWrite.WRITE);
+		ontModel= getOntModel();
+		
+		Individual res =createObject(HowToBogotaClass.RESPUESTAS, idRespuesta);
+		Individual preg = getObject(idPregunta);
+		
+		setProperty(preg, HowToBogotaProperty.PREGUNTA_ASOC_RTA ,res);
+		setProperty(res, HowToBogotaProperty.RTA_ASOC_PREGUNTA ,preg);
+		
+		String idPaso=idRespuesta+0;
+		Individual obj2 =createObject(HowToBogotaClass.PASOS, idPaso);
+			
+		setProperty(res, HowToBogotaProperty.COMPUESTO_DE, obj2);
+
+		Literal l = ontModel.createTypedLiteral(descPaso);
+		setProperty(obj2, HowToBogotaProperty.TEXTO_PASO, l);
+	
+		setProperty(res, HowToBogotaProperty.PRIMER_PASO, obj2);
+		
+		for(int i=0; i< verbos.size();i++){
+			String verb= verbos.get(i);
+			Individual obj = getObject(verb);
+			if(obj==null){
+				//Es necesario crearlo
+				obj =createObject(HowToBogotaClass.VERBOS, verb);
+			}
+			setProperty(obj, HowToBogotaProperty.VERBO_ASOC, res);
+		}
+		
+		for(int i=0; i< entidades.size();i++){
+			String ent= entidades.get(i);
+			Individual obj = getObject(ent);
+			if(obj==null){
+				//Es necesario crearlo
+				obj =createObject(HowToBogotaClass.ENTIDADES, ent);
+			}
+			setProperty(obj, HowToBogotaProperty.ENTIDAD_ASOC, res);
+			
+		}
+		
+		for(int i=0; i< calificativos.size();i++){
+			String calif= calificativos.get(i);
+			Individual obj = getObject(calif);
+			if(obj==null){
+				//Es necesario crearlo
+				obj =createObject(HowToBogotaClass.CALIFICATIVOS, calif);
+			}
+			setProperty(obj, HowToBogotaProperty.CALIFICATIVO_ASOC, res);
+			
+		}
+		dataset.commit();
+		TDB.sync(dataset);
+		return idPaso;
+    }
 }

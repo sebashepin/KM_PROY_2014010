@@ -40,7 +40,7 @@ public class HowToBogotaEngine implements KnowledgeEngine{
 
 	@Override
 	public boolean createQuestion(String question) {
-		 POSTaggerAnswer tg=new POSTaggerAnswer(question);
+		POSTaggerAnswer tg=new POSTaggerAnswer(question);
 		OntologyManager instance = OntologyManager.darInstancia();
 		ArrayList<String> res=instance.buscarPregunta(tg.getVerbs(), tg.getEntities());
 		if(res.size()>0){
@@ -54,14 +54,24 @@ public class HowToBogotaEngine implements KnowledgeEngine{
 
 	@Override
 	public String addFirstStep(String question, String stepDescription) {
-		// TODO Auto-generated method stub
-		return null;
+		POSTaggerAnswer tg=new POSTaggerAnswer(stepDescription);
+		OntologyManager instance = OntologyManager.darInstancia();
+		return instance.agregarPrimerPaso("preg"+Math.random()*100, question, stepDescription,tg.getVerbs(), tg.getEntities(), tg.getAdjectives());
 	}
 
 	@Override
 	public boolean createAndAnswerQuestion(String question, Object[] steps) {
-		// TODO Auto-generated method stub
-		return false;
+		POSTaggerAnswer tg=new POSTaggerAnswer(question);
+		OntologyManager instance = OntologyManager.darInstancia();
+		ArrayList<String> res=instance.buscarPregunta(tg.getVerbs(), tg.getEntities());
+		if(res.size()>0){
+			return false;
+		}else{
+			String idPregunta="preg"+Math.random()*100;
+			instance.agregarPregunta(idPregunta, question, tg.getVerbs(), tg.getEntities(), tg.getAdjectives());
+			instance.agregarRespuesta("resp"+Math.random()*100, idPregunta, (String[])steps, tg.getVerbs(), tg.getEntities(), tg.getAdjectives());
+			return true;
+		}
 	}
 
 }
