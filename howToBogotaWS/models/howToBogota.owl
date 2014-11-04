@@ -1,0 +1,377 @@
+<?xml version="1.0"?>
+
+
+<!DOCTYPE rdf:RDF [
+    <!ENTITY owl "http://www.w3.org/2002/07/owl#" >
+    <!ENTITY xsd "http://www.w3.org/2001/XMLSchema#" >
+    <!ENTITY owl2xml "http://www.w3.org/2006/12/owl2-xml#" >
+    <!ENTITY rdfs "http://www.w3.org/2000/01/rdf-schema#" >
+    <!ENTITY rdf "http://www.w3.org/1999/02/22-rdf-syntax-ns#" >
+    <!ENTITY howToBogota "http://www.semanticweb.org/ontologies/2014/8/howToBogota.owl#" >
+]>
+
+
+<rdf:RDF xmlns="http://www.semanticweb.org/ontologies/2014/8/howToBogota.owl#"
+     xml:base="http://www.semanticweb.org/ontologies/2014/8/howToBogota.owl"
+     xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
+     xmlns:owl2xml="http://www.w3.org/2006/12/owl2-xml#"
+     xmlns:owl="http://www.w3.org/2002/07/owl#"
+     xmlns:xsd="http://www.w3.org/2001/XMLSchema#"
+     xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+     xmlns:howToBogota="http://www.semanticweb.org/ontologies/2014/8/howToBogota.owl#">
+    <owl:Ontology rdf:about="http://www.semanticweb.org/ontologies/2014/8/howToBogota.owl"/>
+    
+
+
+    <!-- 
+    ///////////////////////////////////////////////////////////////////////////////////////
+    //
+    // Object Properties
+    //
+    ///////////////////////////////////////////////////////////////////////////////////////
+     -->
+
+    
+
+
+    <!-- http://www.semanticweb.org/ontologies/2014/8/howToBogota.owl#Compuesto_de -->
+
+    <owl:ObjectProperty rdf:about="&howToBogota;Compuesto_de">
+        <rdf:type rdf:resource="&owl;FunctionalProperty"/>
+        <rdfs:range rdf:resource="&howToBogota;Pasos"/>
+        <rdfs:domain rdf:resource="&howToBogota;Respuestas"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://www.semanticweb.org/ontologies/2014/8/howToBogota.owl#calificado_por -->
+
+    <owl:ObjectProperty rdf:about="&howToBogota;calificado_por">
+        <rdfs:range rdf:resource="&howToBogota;Respuestas"/>
+        <rdfs:domain rdf:resource="&howToBogota;Usuarios"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://www.semanticweb.org/ontologies/2014/8/howToBogota.owl#calificativo_asociado -->
+
+    <owl:ObjectProperty rdf:about="&howToBogota;calificativo_asociado">
+        <rdfs:domain rdf:resource="&howToBogota;Calificativos"/>
+        <rdfs:range rdf:resource="&owl;Thing"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://www.semanticweb.org/ontologies/2014/8/howToBogota.owl#calificativo_sinonimo_de -->
+
+    <owl:ObjectProperty rdf:about="&howToBogota;calificativo_sinonimo_de">
+        <rdf:type rdf:resource="&owl;SymmetricProperty"/>
+        <rdf:type rdf:resource="&owl;TransitiveProperty"/>
+        <rdfs:domain rdf:resource="&howToBogota;Calificativos"/>
+        <rdfs:range rdf:resource="&howToBogota;Calificativos"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://www.semanticweb.org/ontologies/2014/8/howToBogota.owl#entidad_asociada -->
+
+    <owl:ObjectProperty rdf:about="&howToBogota;entidad_asociada">
+        <rdfs:domain rdf:resource="&howToBogota;Entidades"/>
+        <rdfs:range rdf:resource="&owl;Thing"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://www.semanticweb.org/ontologies/2014/8/howToBogota.owl#paso_asociado_a -->
+
+    <owl:ObjectProperty rdf:about="&howToBogota;paso_asociado_a">
+        <rdf:type rdf:resource="&owl;FunctionalProperty"/>
+        <rdf:type rdf:resource="&owl;IrreflexiveProperty"/>
+        <rdfs:domain rdf:resource="&howToBogota;Pasos"/>
+        <rdfs:range rdf:resource="&owl;Thing"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://www.semanticweb.org/ontologies/2014/8/howToBogota.owl#pregunta_asociada_respuesta -->
+
+    <owl:ObjectProperty rdf:about="&howToBogota;pregunta_asociada_respuesta">
+        <rdfs:domain rdf:resource="&howToBogota;Preguntas"/>
+        <rdfs:range rdf:resource="&howToBogota;Respuestas"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://www.semanticweb.org/ontologies/2014/8/howToBogota.owl#primer_paso -->
+
+    <owl:ObjectProperty rdf:about="&howToBogota;primer_paso">
+        <rdf:type rdf:resource="&owl;FunctionalProperty"/>
+        <rdfs:range rdf:resource="&howToBogota;Pasos"/>
+        <rdfs:domain rdf:resource="&howToBogota;Respuestas"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://www.semanticweb.org/ontologies/2014/8/howToBogota.owl#respuesta_asociada_pregunta -->
+
+    <owl:ObjectProperty rdf:about="&howToBogota;respuesta_asociada_pregunta">
+        <rdfs:range rdf:resource="&howToBogota;Preguntas"/>
+        <rdfs:domain rdf:resource="&howToBogota;Respuestas"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://www.semanticweb.org/ontologies/2014/8/howToBogota.owl#tener -->
+
+    <owl:ObjectProperty rdf:about="&howToBogota;tener">
+        <rdf:type rdf:resource="&owl;SymmetricProperty"/>
+        <rdf:type rdf:resource="&owl;TransitiveProperty"/>
+        <rdfs:domain rdf:resource="&owl;Thing"/>
+        <rdfs:range rdf:resource="&owl;Thing"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://www.semanticweb.org/ontologies/2014/8/howToBogota.owl#verbo_asociado -->
+
+    <owl:ObjectProperty rdf:about="&howToBogota;verbo_asociado">
+        <rdfs:domain rdf:resource="&howToBogota;Verbos"/>
+        <rdfs:range rdf:resource="&owl;Thing"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://www.semanticweb.org/ontologies/2014/8/howToBogota.owl#verbo_complementado_por -->
+
+    <owl:ObjectProperty rdf:about="&howToBogota;verbo_complementado_por">
+        <rdfs:range rdf:resource="&howToBogota;Calificativos"/>
+        <rdfs:domain rdf:resource="&howToBogota;Verbos"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://www.semanticweb.org/ontologies/2014/8/howToBogota.owl#verbo_sinonimo_de -->
+
+    <owl:ObjectProperty rdf:about="&howToBogota;verbo_sinonimo_de">
+        <rdf:type rdf:resource="&owl;TransitiveProperty"/>
+        <rdfs:domain rdf:resource="&howToBogota;Verbos"/>
+        <rdfs:range rdf:resource="&howToBogota;Verbos"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- 
+    ///////////////////////////////////////////////////////////////////////////////////////
+    //
+    // Data properties
+    //
+    ///////////////////////////////////////////////////////////////////////////////////////
+     -->
+
+    
+
+
+    <!-- http://www.semanticweb.org/ontologies/2014/8/howToBogota.owl#calificacion -->
+
+    <owl:DatatypeProperty rdf:about="&howToBogota;calificacion">
+        <rdfs:domain rdf:resource="&howToBogota;Respuestas"/>
+        <rdfs:range rdf:resource="&xsd;float"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://www.semanticweb.org/ontologies/2014/8/howToBogota.owl#textoNombre -->
+
+    <owl:DatatypeProperty rdf:about="&howToBogota;textoNombre">
+        <rdfs:domain rdf:resource="&howToBogota;Usuarios"/>
+        <rdfs:range rdf:resource="&xsd;string"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://www.semanticweb.org/ontologies/2014/8/howToBogota.owl#textoPaso -->
+
+    <owl:DatatypeProperty rdf:about="&howToBogota;textoPaso">
+        <rdfs:domain rdf:resource="&howToBogota;Pasos"/>
+        <rdfs:range rdf:resource="&xsd;string"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://www.semanticweb.org/ontologies/2014/8/howToBogota.owl#textoPregunta -->
+
+    <owl:DatatypeProperty rdf:about="&howToBogota;textoPregunta">
+        <rdfs:domain rdf:resource="&howToBogota;Preguntas"/>
+        <rdfs:range rdf:resource="&xsd;string"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- 
+    ///////////////////////////////////////////////////////////////////////////////////////
+    //
+    // Classes
+    //
+    ///////////////////////////////////////////////////////////////////////////////////////
+     -->
+
+    
+
+
+    <!-- http://www.semanticweb.org/ontologies/2014/8/howToBogota.owl#Calificativos -->
+
+    <owl:Class rdf:about="&howToBogota;Calificativos"/>
+    
+
+
+    <!-- http://www.semanticweb.org/ontologies/2014/8/howToBogota.owl#Entidades -->
+
+    <owl:Class rdf:about="&howToBogota;Entidades"/>
+    
+
+
+    <!-- http://www.semanticweb.org/ontologies/2014/8/howToBogota.owl#Pasos -->
+
+    <owl:Class rdf:about="&howToBogota;Pasos">
+        <rdfs:subClassOf rdf:resource="&howToBogota;Respuestas"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/ontologies/2014/8/howToBogota.owl#Preguntas -->
+
+    <owl:Class rdf:about="&howToBogota;Preguntas"/>
+    
+
+
+    <!-- http://www.semanticweb.org/ontologies/2014/8/howToBogota.owl#Respuestas -->
+
+    <owl:Class rdf:about="&howToBogota;Respuestas"/>
+    
+
+
+    <!-- http://www.semanticweb.org/ontologies/2014/8/howToBogota.owl#Usuarios -->
+
+    <owl:Class rdf:about="&howToBogota;Usuarios"/>
+    
+
+
+    <!-- http://www.semanticweb.org/ontologies/2014/8/howToBogota.owl#Verbos -->
+
+    <owl:Class rdf:about="&howToBogota;Verbos"/>
+    
+
+
+    <!-- http://www.w3.org/2002/07/owl#Thing -->
+
+    <owl:Class rdf:about="&owl;Thing"/>
+    
+
+
+    <!-- 
+    ///////////////////////////////////////////////////////////////////////////////////////
+    //
+    // Individuals
+    //
+    ///////////////////////////////////////////////////////////////////////////////////////
+     -->
+
+    
+
+
+    <!-- http://www.semanticweb.org/ontologies/2014/8/howToBogota.owl#Barato -->
+
+    <owl:Thing rdf:about="&howToBogota;Barato">
+        <rdf:type rdf:resource="&howToBogota;Calificativos"/>
+        <rdf:type rdf:resource="&owl;NamedIndividual"/>
+    </owl:Thing>
+    
+
+
+    <!-- http://www.semanticweb.org/ontologies/2014/8/howToBogota.owl#Como_comprar_zapatos_baratos? -->
+
+    <owl:NamedIndividual rdf:about="&howToBogota;Como_comprar_zapatos_baratos?">
+        <rdf:type rdf:resource="&howToBogota;Preguntas"/>
+        <tener rdf:resource="&howToBogota;Barato"/>
+        <tener rdf:resource="&howToBogota;Comprar"/>
+        <tener rdf:resource="&howToBogota;Zapatos"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/ontologies/2014/8/howToBogota.owl#Comprar -->
+
+    <owl:Thing rdf:about="&howToBogota;Comprar">
+        <rdf:type rdf:resource="&howToBogota;Verbos"/>
+        <rdf:type rdf:resource="&owl;NamedIndividual"/>
+    </owl:Thing>
+    
+
+
+    <!-- http://www.semanticweb.org/ontologies/2014/8/howToBogota.owl#Daniel -->
+
+    <owl:Thing rdf:about="&howToBogota;Daniel">
+        <rdf:type rdf:resource="&howToBogota;Usuarios"/>
+        <rdf:type rdf:resource="&owl;NamedIndividual"/>
+        <textoNombre rdf:datatype="&rdfs;Literal">Daniel Salmanca</textoNombre>
+        <tener rdf:resource="&howToBogota;Como_comprar_zapatos_baratos?"/>
+    </owl:Thing>
+    
+
+
+    <!-- http://www.semanticweb.org/ontologies/2014/8/howToBogota.owl#Respuesta34209 -->
+
+    <owl:Thing rdf:about="&howToBogota;Respuesta34209">
+        <rdf:type rdf:resource="&howToBogota;Respuestas"/>
+        <rdf:type rdf:resource="&owl;NamedIndividual"/>
+        <calificacion rdf:datatype="&xsd;float">4,76</calificacion>
+        <tener rdf:resource="&howToBogota;Barato"/>
+        <respuesta_asociada_pregunta rdf:resource="&howToBogota;Como_comprar_zapatos_baratos?"/>
+        <Compuesto_de rdf:resource="&howToBogota;bajarse_en_estación_el_restrepo"/>
+        <Compuesto_de rdf:resource="&howToBogota;ir_a_transmilenio"/>
+        <Compuesto_de rdf:resource="&howToBogota;ir_al_local_Pepito"/>
+    </owl:Thing>
+    
+
+
+    <!-- http://www.semanticweb.org/ontologies/2014/8/howToBogota.owl#Zapatos -->
+
+    <owl:Thing rdf:about="&howToBogota;Zapatos">
+        <rdf:type rdf:resource="&howToBogota;Entidades"/>
+        <rdf:type rdf:resource="&owl;NamedIndividual"/>
+    </owl:Thing>
+    
+
+
+    <!-- http://www.semanticweb.org/ontologies/2014/8/howToBogota.owl#bajarse_en_estación_el_restrepo -->
+
+    <owl:Thing rdf:about="&howToBogota;bajarse_en_estación_el_restrepo">
+        <rdf:type rdf:resource="&howToBogota;Pasos"/>
+        <rdf:type rdf:resource="&owl;NamedIndividual"/>
+        <paso_asociado_a rdf:resource="&howToBogota;ir_al_local_Pepito"/>
+    </owl:Thing>
+    
+
+
+    <!-- http://www.semanticweb.org/ontologies/2014/8/howToBogota.owl#ir_a_transmilenio -->
+
+    <owl:Thing rdf:about="&howToBogota;ir_a_transmilenio">
+        <rdf:type rdf:resource="&howToBogota;Pasos"/>
+        <rdf:type rdf:resource="&owl;NamedIndividual"/>
+        <paso_asociado_a rdf:resource="&howToBogota;bajarse_en_estación_el_restrepo"/>
+    </owl:Thing>
+    
+
+
+    <!-- http://www.semanticweb.org/ontologies/2014/8/howToBogota.owl#ir_al_local_Pepito -->
+
+    <owl:Thing rdf:about="&howToBogota;ir_al_local_Pepito">
+        <rdf:type rdf:resource="&howToBogota;Pasos"/>
+        <rdf:type rdf:resource="&owl;NamedIndividual"/>
+    </owl:Thing>
+</rdf:RDF>
+
+
+
+<!-- Generated by the OWL API (version 3.4.2) http://owlapi.sourceforge.net -->
+
