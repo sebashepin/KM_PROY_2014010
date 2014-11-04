@@ -2,28 +2,29 @@ package co.uniandes.howtobogota.jenaont;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.Iterator;
 
 import com.hp.hpl.jena.ontology.Individual;
 import com.hp.hpl.jena.ontology.OntClass;
 import com.hp.hpl.jena.ontology.OntModel;
 import com.hp.hpl.jena.ontology.OntModelSpec;
 import com.hp.hpl.jena.ontology.OntProperty;
-import com.hp.hpl.jena.ontology.OntResource;
 import com.hp.hpl.jena.query.Dataset;
+import com.hp.hpl.jena.query.Query;
+import com.hp.hpl.jena.query.QueryExecution;
+import com.hp.hpl.jena.query.QueryExecutionFactory;
+import com.hp.hpl.jena.query.QueryFactory;
+import com.hp.hpl.jena.query.QuerySolution;
 import com.hp.hpl.jena.query.ReadWrite;
+import com.hp.hpl.jena.query.ResultSet;
 import com.hp.hpl.jena.rdf.model.Literal;
 import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.ModelFactory;
 import com.hp.hpl.jena.rdf.model.RDFNode;
 import com.hp.hpl.jena.rdf.model.Resource;
-import com.hp.hpl.jena.rdf.model.Selector;
 import com.hp.hpl.jena.rdf.model.SimpleSelector;
-import com.hp.hpl.jena.rdf.model.Statement;
 import com.hp.hpl.jena.rdf.model.StmtIterator;
 import com.hp.hpl.jena.tdb.TDB;
 import com.hp.hpl.jena.tdb.TDBFactory;
-import com.hp.hpl.jena.vocabulary.VCARD;
 
 public class OntologyManager {
 
@@ -270,58 +271,78 @@ public class OntologyManager {
 		TDB.sync(dataset);
 	}
 	
-	public void darRespuesta(String idPregunta){
+	public Step darRespuesta(String idPregunta){
 		dataset.begin(ReadWrite.READ);
 		ontModel= getOntModel();
 		Individual us = getObject(idPregunta);
+		Step first=null;
 		if(us!=null){
-//			{
-//			"status": "OK" ,
-//			"step":{
-//				"step_id":  "1",
-//				"step_description":"I am a step",
-//		        "steps_neighborhood": "1110"
-//			}
-			long n = System.currentTimeMillis();
+
 			OntProperty ptAsociadaRta = ontModel.getOntProperty( URI +HowToBogotaProperty.PREGUNTA_ASOC_RTA.getName());
 			StmtIterator itert = ontModel.listStatements(
 				    new SimpleSelector(us, ptAsociadaRta, (RDFNode) null));
-			if (itert.hasNext()) {
-			    System.out.println("The database contains vcards for:");
-			    while (itert.hasNext()) {
-			        System.out.println("  " + itert.next());
-			    }
-			}
-			 System.out.println(System.currentTimeMillis()-n);
+			int i=0;
 			
-//			if(res!=null){
-//				
-//				OntProperty pasoAsoc = ontModel.getOntProperty( URI +HowToBogotaProperty.PASO_ASOC_A.getName());
-//				StmtIterator itert = ontModel.listStatements(
-//					    new SimpleSelector(null, pasoAsoc, (RDFNode) null));
-//				if (itert.hasNext()) {
-//				    System.out.println("The database contains vcards for:");
-//				    while (itert.hasNext()) {
-//				        System.out.println("  " + itert.next());
-//				    }
-//				}
-//				
-//				OntProperty p = ontModel.getOntProperty( URI +HowToBogotaProperty.COMPUESTO_DE.getName());
-//				StmtIterator iter = ontModel.listStatements(
-//					    new SimpleSelector(res, p, (RDFNode) null));
-//				if (iter.hasNext()) {
-//				    System.out.println("The database contains vcards for:");
-//				    while (iter.hasNext()) {
-//				        System.out.println("  " + iter.next());
-//				    }
-//				} else {
-//				    System.out.println("No vcards were found in the database");
-//				}
-//			}
+			String secondStep=null;
+		    while (itert.hasNext() && i <2) {
+		    	Resource resp=itert.next().getObject().asResource();
+		        System.out.println("  " + resp);
+		        OntProperty pPrimerPaso = ontModel.getOntProperty( URI +HowToBogotaProperty.PRIMER_PASO.getName());
+		        Resource step =resp.getProperty(pPrimerPaso).getResource();
+		      
+		        if(i==0){
+		        	OntProperty  pDescrip= ontModel.getOntProperty( URI +HowToBogotaProperty.TEXTO_PASO.getName());
+		        	first=new Step(step.getLocalName(), step.getProperty(pDescrip).getString());
+		        	OntProperty  pSiguiente= ontModel.getOntProperty( URI +HowToBogotaProperty.PASO_ASOC_A.getName());
+		        	first.setNextStep(step.getProperty(pSiguiente).getResource().getLocalName());
+		        }else{
+		        	secondStep=step.getLocalName();
+		        	first.setDownStep(secondStep);
+		        }
+		        i++;
+		    }
 		}
-		
 		dataset.commit();
 		TDB.sync(dataset);
+		return first;
 	}
-	
+
+
+	public ArrayList<String> buscarPregunta(ArrayList<String>verbos, 
+			ArrayList<String> entidades){
+		ArrayList<String> res=new ArrayList<String>();
+		dataset.begin(ReadWrite.READ);
+		ontModel= getOntModel();
+		
+        String queryString = 
+        		"PREFIX uri:<"+URI +">"+
+        		"SELECT ?x " +
+        		"WHERE {" +
+        		"      ?x <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> uri:"+HowToBogotaClass.PREGUNTAS.getName()+" . "; 
+
+        
+        for(int i=0; i<verbos.size();i++){
+        	queryString=queryString+
+        		"		uri:"+verbos.get(i)+"	uri:"+HowToBogotaProperty.VERBO_ASOC.getName()+"	?x . ";
+        }
+        for(int i=0; i<entidades.size();i++){
+        	queryString=queryString+
+        		"		uri:"+entidades.get(i)+"	uri:"+HowToBogotaProperty.ENTIDAD_ASOC.getName()+"	?x . ";
+        }
+        queryString=queryString+
+        		"      }";
+        
+        
+        Query query = QueryFactory.create(queryString);
+
+    	QueryExecution qe = QueryExecutionFactory.create(query, ontModel);
+    	ResultSet results = qe.execSelect();
+    	while(results.hasNext()){
+    		QuerySolution qr= results.next();
+    		res.add(qr.get("x").asResource().getLocalName());
+    	}
+		dataset.commit();
+		TDB.sync(dataset);
+		return res;
+	}
 }
