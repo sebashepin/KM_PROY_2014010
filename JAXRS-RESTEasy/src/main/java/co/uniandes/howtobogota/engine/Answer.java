@@ -1,4 +1,4 @@
-package com.javacodegeeks.enterprise.rest.resteasy;
+package co.uniandes.howtobogota.engine;
 
 public class Answer {
 
