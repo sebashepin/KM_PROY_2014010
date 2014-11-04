@@ -44,9 +44,9 @@ public class RESTEasyHelloWorldService {
   @POST
   @Path("/GetAnswer")
   @Produces("application/json")
-  public Object answerQuestion(@FormParam("question") String question) {
-
-    return null;
+  public Object getAnswer(@FormParam("question") String question) {
+    KnowledgeEngine knowledgeEngine = KES.getInstance().getKnowledgeEngine();
+    return knowledgeEngine.getAnswerToQuestion(question);
   }
 
   @POST
@@ -96,7 +96,7 @@ public class RESTEasyHelloWorldService {
   }
 
   @POST
-  @Path("/AddFirstStep")
+  @Path("/AddStep")
   @Produces("application/json")
   public String addStep(@FormParam("previous_step_id") String previousStepId,
       @FormParam("step_description") String stepDescription) {
