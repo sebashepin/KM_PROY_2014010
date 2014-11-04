@@ -109,4 +109,16 @@ public class WSEndpoint {
     KnowledgeEngine knowledgeEngine = KES.getInstance().getKnowledgeEngine();
     return knowledgeEngine.addStep(previousStepId, null, stepDescription);
   }
+  
+  /**
+   * @return Created Step stepID - 0 if unsuccesful
+   */
+  @POST
+  @Path("/CreateAndAnswerQuestion")
+  @Produces("application/json")
+  public boolean createAndAnswerQuestion(@FormParam("question") String question,
+      @FormParam("steps") String[] steps) {      
+    KnowledgeEngine knowledgeEngine = KES.getInstance().getKnowledgeEngine();
+    return knowledgeEngine.createAndAnswerQuestion(question, steps);
+  }
 }
