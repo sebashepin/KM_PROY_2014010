@@ -86,6 +86,9 @@ public class WSEndpoint {
     return knowledgeEngine.createQuestion(question);
   }
 
+  /**
+   * @return Created Step stepID - 0 if unsuccesful
+   */
   @POST
   @Path("/AddFirstStep")
   @Produces("application/json")
@@ -95,12 +98,27 @@ public class WSEndpoint {
     return knowledgeEngine.addFirstStep(question, stepDescription);
   }
 
+  /**
+   * @return Created Step stepID - 0 if unsuccesful
+   */
   @POST
   @Path("/AddStep")
   @Produces("application/json")
   public String addStep(@FormParam("previous_step_id") String previousStepId,
-      @FormParam("step_description") String stepDescription) {
+      @FormParam("step_description") String stepDescription) {      
     KnowledgeEngine knowledgeEngine = KES.getInstance().getKnowledgeEngine();
     return knowledgeEngine.addStep(previousStepId, null, stepDescription);
+  }
+  
+  /**
+   * @return Created Step stepID - 0 if unsuccesful
+   */
+  @POST
+  @Path("/CreateAndAnswerQuestion")
+  @Produces("application/json")
+  public boolean createAndAnswerQuestion(@FormParam("question") String question,
+      @FormParam("steps") String[] steps) {      
+    KnowledgeEngine knowledgeEngine = KES.getInstance().getKnowledgeEngine();
+    return knowledgeEngine.createAndAnswerQuestion(question, steps);
   }
 }
