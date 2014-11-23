@@ -28,10 +28,10 @@ import com.hp.hpl.jena.tdb.TDBFactory;
 
 public class OntologyManager {
 
-	//Archivo en el cual se encuentra la ontología
+	//Archivo en el cual se encuentra la ontologï¿½a
 	public static final String ONTOLOGY_DATA_FILE = "file:models/howToBogota.owl";
 	
-	//URI de la ontología
+	//URI de la ontologï¿½a
 	public static final String URI="http://www.semanticweb.org/ontologies/2014/8/howToBogota.owl#";
 	
 	public static final String MODEL_NAME="howToBogota";
@@ -55,16 +55,16 @@ public class OntologyManager {
 	
 	public OntologyManager(){
 
-		//Revisar si la carpeta "dataset" existe, de lo contrario, se crea la ontología a partir del owl.
+		//Revisar si la carpeta "dataset" existe, de lo contrario, se crea la ontologï¿½a a partir del owl.
 		
 		File file = new File("database/");
 
 		if(!file.exists() ||  !(file.list().length>0)){
-			//Se crea un modelo con el lenguaje OWLFull (característica de la ontología), con un modelo de storage in memory
+			//Se crea un modelo con el lenguaje OWLFull (caracterï¿½stica de la ontologï¿½a), con un modelo de storage in memory
 	        //y con un RBS con reglas OWL (Sea lo que sea lo que eso signifique)
-	        //TODO Revisar si con otro tipo de razonadores se podrían obtener mejores/diferentes resultados
+	        //TODO Revisar si con otro tipo de razonadores se podrÃ­an obtener mejores/diferentes resultados
 			OntModel ontModel= ModelFactory.createOntologyModel(ONT_ESPECIFICACION);
-	        //Se lee la ontología
+	        //Se lee la ontologÃ­a
 			ontModel.read( ONTOLOGY_DATA_FILE );
 			
 			dataset = TDBFactory.createDataset("database/");
@@ -92,7 +92,7 @@ public class OntologyManager {
 	}
 
 	/**
-	 * Importante: debe estar abierta una transacción
+	 * Importante: debe estar abierta una transacciï¿½n
 	 * @return the ontModel
 	 */
 	public OntModel getOntModel() {
@@ -195,7 +195,7 @@ public class OntologyManager {
 		Individual respuesta=getObject(idRespuesta);
 		setProperty(usuario, HowToBogotaProperty.CALIFICADO_POR, respuesta);
 		
-		//TODO Genera doble calificación. Averiguar como reemplazar.
+		//TODO Genera doble calificaciï¿½n. Averiguar como reemplazar.
 		Literal l = ontModel.createTypedLiteral(calificacion);
 		setProperty(respuesta, HowToBogotaProperty.CALIFICACION, l);
 		

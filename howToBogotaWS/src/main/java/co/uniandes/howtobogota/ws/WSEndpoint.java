@@ -16,7 +16,7 @@ import co.uniandes.howtobogota.engine.KES;
 import co.uniandes.howtobogota.engine.KnowledgeEngine;
 import co.uniandes.howtobogota.engine.KnowledgeEngine.STEP_NEIGHBOR;
 
-@Path("/HowToBogota")
+@Path("/")
 public class WSEndpoint {
 
   @GET
