@@ -1,5 +1,5 @@
 $(document).ready(function(){
-    /*$('#preguntar #askQuestionForm').submit(function(){  
+    $('#preguntar #askQuestionForm').submit(function(){  
        $('#preguntar .printResults').html("<b>Enviando...</b>");
        $.post('postReceiver.php', $(this).serialize(), function(data){
             $('#preguntar .printResults').html(data);             
@@ -7,7 +7,7 @@ $(document).ready(function(){
 			 alert( "Envío fallido." );      
         });
         return false; 
-    });	*/
+    });	
 });
 
 $(document).ready(function(){
@@ -23,7 +23,7 @@ $('#responderPregunta #createQuestionForm').submit(function(){
     });	
 	
 
-
+/*
 $( "#responderPregunta #askQuestionForm" ).submit(function( event ) {
  
   // Stop form from submitting normally
@@ -43,7 +43,7 @@ $( "#responderPregunta #askQuestionForm" ).submit(function( event ) {
     $( "#printResults" ).append( content );
   });
 });
-
+*/
 
 
 });

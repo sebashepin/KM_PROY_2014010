@@ -25,28 +25,21 @@
 <script src="js/jquery.rateit.js" type="text/javascript"></script>
 </head>
 <body>
-<div data-role="page" id="preguntar">
-  <div data-role="header" > <img src="imagenes/logoVectorial.svg"  alt="HowTo Bogotá" id="logoHeader" /> <a href="#navegacion" data-icon="bars" data-iconpos="notext">Menu</a> <a href="#preguntar" data-icon="home" data-iconpos="notext">Inicio</a> </div>
+<div data-role="page" id="inicio">
   <div data-role="content">
-    <div class="contenedor clearfix">
-      <div id="contenidoPrincipal">
-        <form id="askQuestionForm">
-          <h3 class="lobster">How To...</h3>
-          <input type="text" name="question"  id="question" placeholder="Ask Here">
-          <p id="enBogota">...in Bogotá<span>?</span></p>
-          <div id="enviarPHP">
-            <input type='submit' value='ASK'/>
-          </div>
-          <!--<a href="#respuesta" id="askQuestion">ASK</a> -->
+    <div class="contenedor">
+      <div id="izquierdoHome"> <img src="imagenes/logoVectorial.svg"  alt="HowTo Bogotá" id="logoLogin" /> </div>
+      <div id="derechoHome">
+        <form id="login">
+          <input name="user Name" type="text" id="userName" form="login" placeholder="User Name">
+          <input name="Password" type="password" id="Password" placeholder="Password">
+          <a href="#preguntar" id="LOGIN">LOGIN</a> 
+          <input name="LOGIN" type="button" id="LOGIN" title="LOGIN" value="LOGIN">
           
         </form>
-        <div class="printResults"></div>
       </div>
     </div>
   </div>
-  
-
-  
 </div>
 
 </body>
