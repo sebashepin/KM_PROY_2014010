@@ -13,8 +13,7 @@ $(document).ready(function(){
 	     .attr("id", 'divStep' + counter);
  
 	divStep.after().html('<label><span class="textoPAso">STEP</span><span class="numeroPaso">'+ counter + ' </span></label>' +
-	      '<input type="text" name="step' + counter + 
-	      '" id="step' + counter + '" value="" >');
+	      '<input type="text" name="steps['+ counter + ']" id="step' + counter + '" value="" >');
  
 	divStep.appendTo("#pasosPregunta");
  
