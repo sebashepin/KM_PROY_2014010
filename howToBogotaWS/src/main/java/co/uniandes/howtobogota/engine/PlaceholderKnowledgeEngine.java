@@ -76,7 +76,8 @@ public class PlaceholderKnowledgeEngine implements KnowledgeEngine {
     System.out.println("Step status");
     System.out.println("\tkey\t|\tstep_id\t|\tstep_description");
     for (int i = 1; i <= stepIdCounter; i++) {
-      System.out.println(String.format("\t%i\t|\t%s\t|\t%s", i, stepsById.get(i).stepId,stepsById.get(i).stepDescription));
+      if (stepsById.get(i+"") == null) continue;
+      System.out.println(String.format("\t%s\t|\t%s\t|\t%s", i+"", stepsById.get(i+"").stepId,stepsById.get(i+"").stepDescription));
     }
     
     return stepToAdd.stepId;
@@ -136,17 +137,17 @@ public class PlaceholderKnowledgeEngine implements KnowledgeEngine {
     }
 
     public String getNeighborhoodString() {
-      int neighbors = 0;
+      char[] neighbors = "0000".toCharArray();
       if (upStep != null)
-        neighbors += 1000;
+        neighbors[0] = '1';
       if (nextStep != null)
-        neighbors += 0100;
+        neighbors[1] = '1';
       if (downStep != null)
-        neighbors += 0010;
+        neighbors[2] = '1';
       if (previousStep != null)
-        neighbors += 0001;
+        neighbors[3] = '1';
 
-      return "" + neighbors;
+      return "" + String.valueOf(neighbors);
     }
 
     public Step getStepByDirection(STEP_NEIGHBOR stepDirection) {
