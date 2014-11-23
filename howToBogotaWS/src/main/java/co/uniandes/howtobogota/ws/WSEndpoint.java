@@ -34,11 +34,8 @@ public class WSEndpoint {
   @Path("/answer")
   @Produces("application/json")
   public AnswerResponse placeholderAnswer() {
-    AnswerResponse st =
-        new AnswerResponse(AnswerResponse.STATUS.OK, new Answer("23",
-            "I'm the first and most popular step", "1101"));
-
-    return st;
+    KnowledgeEngine knowledgeEngine = KES.getInstance().getKnowledgeEngine();
+    return knowledgeEngine.getAnswerToQuestion("Placeholder question");
   }
 
   @POST
