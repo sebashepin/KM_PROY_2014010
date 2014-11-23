@@ -44,15 +44,16 @@ public class WSEndpoint {
   @POST
   @Path("/GetAnswer")
   @Produces("application/json")
-  public Object getAnswer(@FormParam("question") String question) {
+  public AnswerResponse getAnswer(@FormParam("question") String question) {
     KnowledgeEngine knowledgeEngine = KES.getInstance().getKnowledgeEngine();
+    System.out.println("Question received:\t"+question);
     return knowledgeEngine.getAnswerToQuestion(question);
   }
 
-  @POST
+  @GET
   @Path("/GetStep")
   @Produces("application/json")
-  public AnswerResponse getStep(@FormParam("stepId") String stepId,
+  public AnswerResponse getStep(@FormParam("step_id") String stepId,
       @FormParam("step_direction") String stepDirectionString) {
     STEP_NEIGHBOR relativeDirection = null;
     int direction = Integer.parseInt(stepDirectionString);
