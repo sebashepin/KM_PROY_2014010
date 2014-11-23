@@ -98,7 +98,7 @@ var llamarSiguientePaso= function(pasoActual){
 
 	var velocidad = 500;
 	if(pasoActual==1){
-		$.getJSON('rest/GetStep?step_id=s&step_direction=s', function(respuesta) {
+		$.getJSON('rest/GetStep?step_id=2&step_direction=0100', function(respuesta) {
 			$('.arriba').click(function(){		
 
 
