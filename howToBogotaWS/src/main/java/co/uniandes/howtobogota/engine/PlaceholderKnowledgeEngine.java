@@ -12,7 +12,7 @@ public class PlaceholderKnowledgeEngine implements KnowledgeEngine {
 
   private HashMap<String, Step> stepsByQuestion;
   private Hashtable<String, Step> stepsById;
-  private int stepIdCounter = 0;
+  private int stepIdCounter = 1;
 
   public PlaceholderKnowledgeEngine() {
     stepsByQuestion = new HashMap<String, PlaceholderKnowledgeEngine.Step>();
