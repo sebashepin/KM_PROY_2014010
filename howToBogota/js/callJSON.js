@@ -2,7 +2,7 @@ $(document).ready(function() {
 	
 
     	//$.getJSON('http://25.141.65.84:8080/JAXRS-RESTEasy/rest/RESTEasyHelloWorld/answer', function(respuesta) {
-    		$.getJSON('js/answer3.json', function(respuesta) {
+    		$.getJSON('rest/answer', function(respuesta) {
 
 			 /*  var crearTextPaso = function(){
 			  $('.swiper-slide').html('<p class="paso"><span class="textoPAso">STEP</span> <span class="numeroPaso">' + respuesta.step.step_id+ '</span></p>');
@@ -32,7 +32,7 @@ $(document).ready(function() {
 
 var crearBotones = function(setBotones){
 	if(setBotones==1){
-		$.getJSON('js/answer3.json', function(respuesta) {		
+		$.getJSON('rest/answer', function(respuesta) {		
 			if(respuesta.step.steps_neighborhood.charAt(0) == "1" ){ 
 				$('.swiper-slide').append('<a href"#" class="arriba"></a>');	
 			}
@@ -58,7 +58,7 @@ var crearBotones = function(setBotones){
 		});
 	}
 	if(setBotones==2){
-		$.getJSON('js/nextStep.json', function(respuesta) {		
+		$.getJSON('rest/GetStep?step_id=2&step_direction=0100', function(respuesta) {		
 			if(respuesta.step.steps_neighborhood.charAt(0) == "1" ){ 
 				$('.swiper-slide').append('<a href"#" class="arriba"></a>');	
 			}
@@ -98,7 +98,7 @@ var llamarSiguientePaso= function(pasoActual){
 
 	var velocidad = 500;
 	if(pasoActual==1){
-		$.getJSON('js/nextStep.json', function(respuesta) {
+		$.getJSON('rest/GetStep?step_id=s&step_direction=s', function(respuesta) {
 			$('.arriba').click(function(){		
 
 
@@ -157,7 +157,7 @@ var llamarSiguientePaso= function(pasoActual){
 }
 
 if(pasoActual==2){
-	$.getJSON('js/answer3.json', function(respuesta) {
+	$.getJSON('rest/answer', function(respuesta) {
 		$('.arriba').click(function(){		
 
 
@@ -226,10 +226,8 @@ $('.swiper-slide').html('<p class="paso"><span class="textoPAso">STEP</span> <sp
 var crearRating= function(){
 	$('.swiper-slide #ratingPregunta').append('<input type="hidden" id="rating" name="rating"><div id="califique">califique la respuesta</div><div id="rateit"></div>');
 	$(function () { $('#rateit').rateit({ max: 5, step: 1, backingfld: '#rating' }); });
-	
-
 }
+
 $( document ).delegate("#respuesta", "pageinit", function() {
 	crearRating();
-
 });
