@@ -53,8 +53,8 @@ public class WSEndpoint {
   @GET
   @Path("/GetStep")
   @Produces("application/json")
-  public AnswerResponse getStep(@FormParam("step_id") String stepId,
-      @FormParam("step_direction") String stepDirectionString) {
+  public AnswerResponse getStep(@QueryParam("step_id") String stepId,
+      @QueryParam("step_direction") String stepDirectionString) {
     STEP_NEIGHBOR relativeDirection = null;
     int direction = Integer.parseInt(stepDirectionString);
 
