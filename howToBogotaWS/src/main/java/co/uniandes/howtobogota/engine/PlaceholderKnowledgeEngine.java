@@ -55,23 +55,31 @@ public class PlaceholderKnowledgeEngine implements KnowledgeEngine {
 
   @Override
   public String addStep(String previousStepId, String nextStepId, String stepDescription) {
-    Step step = new Step(stepDescription);
-    step.stepId = stepIdCounter + "";
+    Step stepToAdd = new Step(stepDescription);
+    stepToAdd.stepId = stepIdCounter + "";
     stepIdCounter++;
-    step.previousStep = stepsById.get(previousStepId);
-    if (step.previousStep.nextStep != null) {
-      Step newUpStep = getBottom(step.previousStep.nextStep);
-      newUpStep.downStep = step;
-      step.upStep = step;
+    stepToAdd.previousStep = stepsById.get(previousStepId);
+    Step oldNextStep = stepToAdd.previousStep.nextStep;
+    if (oldNextStep != null) {
+      Step newUpStep = getBottom(oldNextStep);
+      newUpStep.downStep = stepToAdd;
+      stepToAdd.upStep = newUpStep;
     } else
-      step.previousStep.nextStep = step;
+      stepToAdd.previousStep.nextStep = stepToAdd;
     if (nextStepId != null) {
-      step.nextStep = stepsById.get(nextStepId);
+      stepToAdd.nextStep = stepsById.get(nextStepId);
     }
 
-    stepsById.put(step.stepId, step);
+    stepsById.put(stepToAdd.stepId, stepToAdd);
 
-    return step.stepId;
+    System.out.println("============================================");
+    System.out.println("Step status");
+    System.out.println("\tkey\t|\tstep_id\t|\tstep_description");
+    for (int i = 1; i <= stepIdCounter; i++) {
+      System.out.println(String.format("\t%i\t|\t%s\t|\t%s", i, stepsById.get(i).stepId,stepsById.get(i).stepDescription));
+    }
+    
+    return stepToAdd.stepId;
   }
 
   @Override
