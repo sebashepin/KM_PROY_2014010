@@ -3,6 +3,8 @@ package co.uniandes.howtobogota.jenaont;
 import java.io.File;
 import java.util.ArrayList;
 
+import co.uniandes.howtobogota.engine.KnowledgeEngine.STEP_NEIGHBOR;
+
 import com.hp.hpl.jena.ontology.Individual;
 import com.hp.hpl.jena.ontology.OntClass;
 import com.hp.hpl.jena.ontology.OntModel;
@@ -318,7 +320,7 @@ public class OntologyManager {
         		"PREFIX uri:<"+URI +">"+
         		"SELECT ?x " +
         		"WHERE {" +
-        		"      ?x <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> uri:"+HowToBogotaClass.PREGUNTAS.getName()+" . "; 
+        		"      ?x <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> ?x . "; 
 
         
         for(int i=0; i<verbos.size();i++){
@@ -403,4 +405,106 @@ public class OntologyManager {
 		TDB.sync(dataset);
 		return idPaso;
     }
+    
+    
+	public void getNextStepNeighbor(String stepId){
+		dataset.begin(ReadWrite.READ);
+		ontModel= getOntModel();
+		
+        String queryString = 
+        		"PREFIX uri:<"+URI +">"+
+        		"SELECT ?x " +
+        		"WHERE {" +
+        		"      uri:"+stepId+" uri:"+HowToBogotaProperty.PASO_ASOC_A.getName()+" ?x . " +
+        		"      ?x uri:"+HowToBogotaProperty.CALIFICACION.getName()+" ?cal . " + 
+        		"} "+
+        		"ORDER BY DESC(?cal) LIMIT 1"; 
+
+        
+      
+        
+        Query query = QueryFactory.create(queryString);
+
+    	QueryExecution qe = QueryExecutionFactory.create(query, ontModel);
+    	ResultSet results = qe.execSelect();
+    	while(results.hasNext()){
+    		QuerySolution qr= results.next();
+    		System.out.println(qr.getResource("x").getLocalName());
+    	}
+		dataset.commit();
+		TDB.sync(dataset);
+
+	}
+	
+	public void getUpDownStepNeighbor(String stepId, boolean up){
+		
+		dataset.begin(ReadWrite.READ);
+		ontModel= getOntModel();
+		
+		String order="DESC";
+		if(!up){
+			order="ASC";
+		}
+		//TODO: Tener en cuenta el predecesor. 
+        String queryString = 
+        		"PREFIX uri:<"+URI +">"+
+        		"SELECT ?x " +
+        		"WHERE {" +
+        		"      ?pred uri:"+HowToBogotaProperty.PASO_ASOC_A.getName()+" uri:"+stepId+" ." +
+        		"      ?pred uri:"+HowToBogotaProperty.PASO_ASOC_A.getName()+" ?x ." +
+        		"      ?x uri:"+HowToBogotaProperty.CALIFICACION.getName()+" ?cal . " + 
+        		"} "+
+        		"ORDER BY "+order+"(?cal) LIMIT 1"; 
+        
+        Query query = QueryFactory.create(queryString);
+
+    	QueryExecution qe = QueryExecutionFactory.create(query, ontModel);
+    	ResultSet results = qe.execSelect();
+    	while(results.hasNext()){
+    		QuerySolution qr= results.next();
+    		String rtaId=qr.getResource("x").getLocalName();
+    		if(rtaId.equals(stepId)){
+    			System.out.println("No hay");
+    		}else{
+    		System.out.println(rtaId);
+    		}
+    	}
+		dataset.commit();
+		TDB.sync(dataset);
+
+	}
+	
+	public void getPrevStepNeighbor(String stepId){
+		
+		dataset.begin(ReadWrite.READ);
+		ontModel= getOntModel();
+		
+		//TODO: Tener en cuenta que puede tener muchos predecesores el predecesor. 
+		//Por ahora se escoge el predecesor con mayor calificación
+        String queryString = 
+        		"PREFIX uri:<"+URI +">"+
+        		"SELECT ?x " +
+        		"WHERE {" +
+        		"      ?x uri:"+HowToBogotaProperty.PASO_ASOC_A.getName()+" uri:"+stepId+" ." +
+        		"      ?x uri:"+HowToBogotaProperty.CALIFICACION.getName()+" ?cal . " + 
+        		"} "+
+        		"ORDER BY DESC(?cal) LIMIT 1"; 
+        
+        Query query = QueryFactory.create(queryString);
+
+    	QueryExecution qe = QueryExecutionFactory.create(query, ontModel);
+    	ResultSet results = qe.execSelect();
+    	while(results.hasNext()){
+    		QuerySolution qr= results.next();
+    		String rtaId=qr.getResource("x").getLocalName();
+    		if(rtaId.equals(stepId)){
+    			System.out.println("No hay");
+    		}else{
+    		System.out.println(rtaId);
+    		}
+    	}
+		dataset.commit();
+		TDB.sync(dataset);
+
+	}
 }

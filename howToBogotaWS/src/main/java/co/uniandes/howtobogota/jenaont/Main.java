@@ -21,6 +21,7 @@
 package co.uniandes.howtobogota.jenaont;
 import java.util.ArrayList;
 import java.util.Iterator;
+
 import com.hp.hpl.jena.ontology.*;
 import com.hp.hpl.jena.query.Dataset;
 import com.hp.hpl.jena.query.ReadWrite;
@@ -43,7 +44,8 @@ public class Main {
         POSTaggerAnswer tg=new POSTaggerAnswer(line);
     	
     	OntologyManager instance = OntologyManager.darInstancia();
-//    	instance.agregarPregunta("pregunta1", line, tg.getVerbs(), tg.getEntities(), tg.getAdjectives());
+    	instance.agregarPregunta("pregunta1", line, tg.getVerbs(), tg.getEntities(), tg.getAdjectives());
+    	instance. getUpDownStepNeighbor("paso_5", true);
 //    	
 //    	instance.agregarUsuario("us1", "Usuario1");
 //    	
