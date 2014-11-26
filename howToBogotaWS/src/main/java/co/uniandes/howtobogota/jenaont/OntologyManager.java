@@ -24,6 +24,7 @@ import com.hp.hpl.jena.rdf.model.ModelFactory;
 import com.hp.hpl.jena.rdf.model.RDFNode;
 import com.hp.hpl.jena.rdf.model.Resource;
 import com.hp.hpl.jena.rdf.model.SimpleSelector;
+import com.hp.hpl.jena.rdf.model.Statement;
 import com.hp.hpl.jena.rdf.model.StmtIterator;
 import com.hp.hpl.jena.tdb.TDB;
 import com.hp.hpl.jena.tdb.TDBFactory;
@@ -360,6 +361,7 @@ public class OntologyManager {
 		setProperty(preg, HowToBogotaProperty.PREGUNTA_ASOC_RTA ,res);
 		setProperty(res, HowToBogotaProperty.RTA_ASOC_PREGUNTA ,preg);
 		
+		//TODO
 		String idPaso=idRespuesta+0;
 		Individual obj2 =createObject(HowToBogotaClass.PASOS, idPaso);
 			
@@ -446,6 +448,7 @@ public class OntologyManager {
 			order="ASC";
 		}
 		//TODO: Tener en cuenta el predecesor. 
+		//Por ahora se tienen en cuenta todos los predecesores
         String queryString = 
         		"PREFIX uri:<"+URI +">"+
         		"SELECT ?x " +
@@ -454,20 +457,55 @@ public class OntologyManager {
         		"      ?pred uri:"+HowToBogotaProperty.PASO_ASOC_A.getName()+" ?x ." +
         		"      ?x uri:"+HowToBogotaProperty.CALIFICACION.getName()+" ?cal . " + 
         		"} "+
-        		"ORDER BY "+order+"(?cal) LIMIT 1"; 
+        		"ORDER BY "+order+"(?cal)"; 
         
         Query query = QueryFactory.create(queryString);
 
     	QueryExecution qe = QueryExecutionFactory.create(query, ontModel);
     	ResultSet results = qe.execSelect();
+    	
+    	String idStep=null;
+    	boolean gotIn=false;
     	while(results.hasNext()){
+    		gotIn=true;
     		QuerySolution qr= results.next();
     		String rtaId=qr.getResource("x").getLocalName();
     		if(rtaId.equals(stepId)){
-    			System.out.println("No hay");
+    			break;
     		}else{
-    		System.out.println(rtaId);
+    			idStep=rtaId;
     		}
+    	}
+    	if(gotIn){
+	    	if(idStep==null){
+	    		System.out.println("El paso no tiene "+(up?"up":"down"));
+	    	}else{
+	    		System.out.println(idStep);
+	    	}
+    	}else{
+    		//Ningún paso tiene calificación
+    		//Entrega un paso aleatorio 
+    		queryString = 
+            		"PREFIX uri:<"+URI +">"+
+            		"SELECT ?x " +
+            		"WHERE {" +
+            		"      ?pred uri:"+HowToBogotaProperty.PASO_ASOC_A.getName()+" uri:"+stepId+" ." +
+            		"      ?pred uri:"+HowToBogotaProperty.PASO_ASOC_A.getName()+" ?x ." +
+            		"} "+
+            		"ORDER BY "+order+"(?cal)"; 
+            
+            query = QueryFactory.create(queryString);
+
+        	qe = QueryExecutionFactory.create(query, ontModel);
+        	results = qe.execSelect();
+        	while(results.hasNext()){
+        		QuerySolution qr= results.next();
+        		String rtaId=qr.getResource("x").getLocalName();
+        		if(!rtaId.equals(stepId)){
+        			idStep=rtaId;
+        			break;
+        		}
+        	}
     	}
 		dataset.commit();
 		TDB.sync(dataset);
@@ -507,4 +545,95 @@ public class OntologyManager {
 		TDB.sync(dataset);
 
 	}
+	
+	
+	public String addStep(String previousStepId, String nextStepId, String stepDescription) {
+		dataset.begin(ReadWrite.WRITE);
+		ontModel= getOntModel();
+		
+		//Obtener y actualizar los id de pasos
+		String idPaso="paso"+darSiguienteId("idPasos");
+		
+		//Crear el paso
+		Individual pasoA =createObject(HowToBogotaClass.PASOS, idPaso);
+		Literal lDesc = ontModel.createTypedLiteral(stepDescription);
+		setProperty(pasoA, HowToBogotaProperty.TEXTO_PASO, lDesc);
+	
+		//Hacer el enlace con su paso anterior
+		Individual prePaso=getObject(previousStepId);
+		setProperty(prePaso, HowToBogotaProperty.PASO_ASOC_A, pasoA );
+		
+		if(nextStepId!=null && !nextStepId.equals("")){
+			//Hacer el enlace con el paso siguiente
+			Individual sgPaso=getObject(nextStepId);
+			setProperty(pasoA, HowToBogotaProperty.PASO_ASOC_A, sgPaso );
+		}
+		
+		dataset.commit();
+		TDB.sync(dataset);
+		return idPaso;
+  }
+	
+	private int darSiguienteId(String elemento){
+		Individual contPasos=getObject(elemento);
+		OntProperty  pCantidad= ontModel.getOntProperty( URI +HowToBogotaProperty.CANTIDAD.getName());
+		Statement cantidad=contPasos.getProperty(pCantidad);
+		int cantPasos=cantidad.getInt();
+		contPasos.removeProperty(pCantidad, cantidad.getObject());
+		cantPasos++;
+		Literal l= ontModel.createTypedLiteral(cantPasos);
+		contPasos.addProperty(pCantidad, l);
+		return cantPasos;
+	}
+	
+	public void calificarCamino(String[] pasos, double calificacion){
+		dataset.begin(ReadWrite.WRITE);
+		ontModel= getOntModel();
+		for(int i=0; i< pasos.length;i++){
+			String idPaso=pasos[i];
+			Individual paso=getObject(idPaso);
+			
+			OntProperty  pCalificacion= ontModel.getOntProperty( URI +HowToBogotaProperty.CALIFICACION.getName());
+			Statement sCalificacion=paso.getProperty(pCalificacion);
+			if(sCalificacion!=null){
+				float curCalificacion=sCalificacion.getFloat();
+				
+				OntProperty  pNumCalificacion= ontModel.getOntProperty( URI +HowToBogotaProperty.NUM_CALIFICACIONES.getName());
+				Statement sNumCalificacion=paso.getProperty(pNumCalificacion);
+				int numCalificaciones=sNumCalificacion.getInt();
+				
+				paso.removeProperty(pCalificacion, sCalificacion.getObject());
+				paso.removeProperty(pNumCalificacion, sNumCalificacion.getObject());
+				
+				//Se recalcula todo
+				numCalificaciones++;
+				curCalificacion=(((float)numCalificaciones-1)/(float)numCalificaciones)*curCalificacion+(1/(float)numCalificaciones)*(float)calificacion;
+				
+				Literal lCurCalificacion= ontModel.createTypedLiteral(curCalificacion);
+				paso.addProperty(pCalificacion, lCurCalificacion);
+				
+				Literal lNumCalificacion= ontModel.createTypedLiteral(numCalificaciones);
+				paso.addProperty(pNumCalificacion, lNumCalificacion);
+			}else{
+				OntProperty  pNumCalificacion= ontModel.getOntProperty( URI +HowToBogotaProperty.NUM_CALIFICACIONES.getName());
+				Statement sNumCalificacion=paso.getProperty(pNumCalificacion);
+				if(sNumCalificacion!=null){
+					paso.removeProperty(pNumCalificacion, sNumCalificacion.getObject());
+				}
+				float curCalificacion=(float)calificacion;
+				int numCalificaciones=1;
+				
+				Literal lCurCalificacion= ontModel.createTypedLiteral(curCalificacion);
+				paso.addProperty(pCalificacion, lCurCalificacion);
+				
+				Literal lNumCalificacion= ontModel.createTypedLiteral(numCalificaciones);
+				paso.addProperty(pNumCalificacion, lNumCalificacion);
+			}
+		}
+		dataset.commit();
+		TDB.sync(dataset);
+	}
+	
+
+	
 }

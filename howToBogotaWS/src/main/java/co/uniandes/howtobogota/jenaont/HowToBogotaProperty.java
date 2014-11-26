@@ -17,7 +17,9 @@ public enum HowToBogotaProperty {
 	TEXTO_NOMBRE("textoNombre"), //Propiedad de los usuarios
 	TEXTO_PASO("textoPaso"), //Propiedad de los pasos
 	TEXTO_PREGUNTA("textoPregunta"), //Propiedad de las preguntas
-	PRIMER_PASO("primer_paso") //Respuesta => Pasos
+	PRIMER_PASO("primer_paso"), //Respuesta => Pasos
+	CANTIDAD("cantidad"), //Cantidad de identificadores que hay.
+	NUM_CALIFICACIONES("numCalificaciones") //Número de calificaciones de un paso
 	;
 	
 	private String name;
