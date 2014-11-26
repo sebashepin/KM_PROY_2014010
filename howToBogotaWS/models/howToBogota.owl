@@ -170,6 +170,15 @@
     
 
 
+    <!-- http://www.semanticweb.org/ontologies/2014/8/howToBogota.owl#numCalificaciones -->
+
+    <owl:DatatypeProperty rdf:about="&howToBogota;numCalificaciones">
+        <rdfs:domain rdf:resource="&howToBogota;Pasos"/>
+        <rdfs:range rdf:resource="&xsd;int"/>
+    </owl:DatatypeProperty>
+    
+
+
     <!-- http://www.semanticweb.org/ontologies/2014/8/howToBogota.owl#textoNombre -->
 
     <owl:DatatypeProperty rdf:about="&howToBogota;textoNombre">
@@ -338,7 +347,6 @@
     <owl:Thing rdf:about="&howToBogota;bajarse_en_estación_el_restrepo">
         <rdf:type rdf:resource="&howToBogota;Pasos"/>
         <rdf:type rdf:resource="&owl;NamedIndividual"/>
-        <calificacion rdf:datatype="&xsd;float">4.0</calificacion>
         <textoPaso rdf:datatype="&xsd;string">Bajarse en estación el restrepo.</textoPaso>
         <paso_asociado_a rdf:resource="&howToBogota;ir_al_local_Pepito"/>
     </owl:Thing>
@@ -377,6 +385,7 @@
     <owl:Thing rdf:about="&howToBogota;ir_a_transmilenio">
         <rdf:type rdf:resource="&howToBogota;Pasos"/>
         <rdf:type rdf:resource="&owl;NamedIndividual"/>
+        <numCalificaciones rdf:datatype="&xsd;int">2</numCalificaciones>
         <calificacion rdf:datatype="&xsd;float">4.0</calificacion>
         <textoPaso rdf:datatype="&xsd;string">Ir a transmilenio</textoPaso>
         <paso_asociado_a rdf:resource="&howToBogota;bajarse_en_estación_el_restrepo"/>
@@ -391,6 +400,7 @@
     <owl:Thing rdf:about="&howToBogota;ir_al_local_Pepito">
         <rdf:type rdf:resource="&howToBogota;Pasos"/>
         <rdf:type rdf:resource="&owl;NamedIndividual"/>
+        <numCalificaciones rdf:datatype="&xsd;int">1</numCalificaciones>
         <calificacion rdf:datatype="&xsd;float">4.0</calificacion>
         <textoPaso rdf:datatype="&xsd;string">Ir al local de Pepito</textoPaso>
     </owl:Thing>
@@ -401,16 +411,9 @@
 
     <owl:NamedIndividual rdf:about="&howToBogota;paso4">
         <rdf:type rdf:resource="&howToBogota;Pasos"/>
-        <calificacion rdf:datatype="&xsd;int">2</calificacion>
+        <numCalificaciones rdf:datatype="&xsd;int">2</numCalificaciones>
+        <calificacion rdf:datatype="&xsd;float">2.0</calificacion>
         <textoPaso rdf:datatype="&xsd;string">Bajarse en estación X</textoPaso>
-    </owl:NamedIndividual>
-    
-
-
-    <!-- http://www.semanticweb.org/ontologies/2014/8/howToBogota.owl#paso6 -->
-
-    <owl:NamedIndividual rdf:about="&howToBogota;paso6">
-        <rdf:type rdf:resource="&howToBogota;Pasos"/>
     </owl:NamedIndividual>
     
 
@@ -419,7 +422,8 @@
 
     <owl:NamedIndividual rdf:about="&howToBogota;paso_5">
         <rdf:type rdf:resource="&howToBogota;Pasos"/>
-        <calificacion rdf:datatype="&xsd;int">5</calificacion>
+        <numCalificaciones rdf:datatype="&xsd;int">3</numCalificaciones>
+        <calificacion rdf:datatype="&xsd;float">5.0</calificacion>
         <textoPaso rdf:datatype="&xsd;string">Bajarse en estación Y</textoPaso>
     </owl:NamedIndividual>
 </rdf:RDF>
