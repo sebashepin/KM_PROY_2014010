@@ -47,7 +47,7 @@
     <!-- http://www.semanticweb.org/ontologies/2014/8/howToBogota.owl#calificado_por -->
 
     <owl:ObjectProperty rdf:about="&howToBogota;calificado_por">
-        <rdfs:range rdf:resource="&howToBogota;Respuestas"/>
+        <rdfs:range rdf:resource="&howToBogota;Pasos"/>
         <rdfs:domain rdf:resource="&howToBogota;Usuarios"/>
     </owl:ObjectProperty>
     
@@ -96,27 +96,8 @@
     <!-- http://www.semanticweb.org/ontologies/2014/8/howToBogota.owl#pregunta_asociada_respuesta -->
 
     <owl:ObjectProperty rdf:about="&howToBogota;pregunta_asociada_respuesta">
-        <rdfs:domain rdf:resource="&howToBogota;Preguntas"/>
-        <rdfs:range rdf:resource="&howToBogota;Respuestas"/>
-    </owl:ObjectProperty>
-    
-
-
-    <!-- http://www.semanticweb.org/ontologies/2014/8/howToBogota.owl#primer_paso -->
-
-    <owl:ObjectProperty rdf:about="&howToBogota;primer_paso">
-        <rdf:type rdf:resource="&owl;FunctionalProperty"/>
         <rdfs:range rdf:resource="&howToBogota;Pasos"/>
-        <rdfs:domain rdf:resource="&howToBogota;Respuestas"/>
-    </owl:ObjectProperty>
-    
-
-
-    <!-- http://www.semanticweb.org/ontologies/2014/8/howToBogota.owl#respuesta_asociada_pregunta -->
-
-    <owl:ObjectProperty rdf:about="&howToBogota;respuesta_asociada_pregunta">
-        <rdfs:range rdf:resource="&howToBogota;Preguntas"/>
-        <rdfs:domain rdf:resource="&howToBogota;Respuestas"/>
+        <rdfs:domain rdf:resource="&howToBogota;Preguntas"/>
     </owl:ObjectProperty>
     
 
@@ -174,8 +155,17 @@
     <!-- http://www.semanticweb.org/ontologies/2014/8/howToBogota.owl#calificacion -->
 
     <owl:DatatypeProperty rdf:about="&howToBogota;calificacion">
-        <rdfs:domain rdf:resource="&howToBogota;Respuestas"/>
+        <rdfs:domain rdf:resource="&howToBogota;Pasos"/>
         <rdfs:range rdf:resource="&xsd;float"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://www.semanticweb.org/ontologies/2014/8/howToBogota.owl#cantidad -->
+
+    <owl:DatatypeProperty rdf:about="&howToBogota;cantidad">
+        <rdfs:domain rdf:resource="&howToBogota;ContIdentificador"/>
+        <rdfs:range rdf:resource="&xsd;int"/>
     </owl:DatatypeProperty>
     
 
@@ -207,6 +197,14 @@
     
 
 
+    <!-- http://www.w3.org/2002/07/owl#topDataProperty -->
+
+    <rdf:Description rdf:about="&owl;topDataProperty">
+        <rdfs:range rdf:resource="&xsd;int"/>
+    </rdf:Description>
+    
+
+
     <!-- 
     ///////////////////////////////////////////////////////////////////////////////////////
     //
@@ -221,6 +219,12 @@
     <!-- http://www.semanticweb.org/ontologies/2014/8/howToBogota.owl#Calificativos -->
 
     <owl:Class rdf:about="&howToBogota;Calificativos"/>
+    
+
+
+    <!-- http://www.semanticweb.org/ontologies/2014/8/howToBogota.owl#ContIdentificador -->
+
+    <owl:Class rdf:about="&howToBogota;ContIdentificador"/>
     
 
 
@@ -292,6 +296,7 @@
 
     <owl:NamedIndividual rdf:about="&howToBogota;Como_comprar_zapatos_baratos?">
         <rdf:type rdf:resource="&howToBogota;Preguntas"/>
+        <textoPregunta rdf:datatype="&xsd;string">Cómo comprar zapatos baratos?</textoPregunta>
         <tener rdf:resource="&howToBogota;Barato"/>
         <tener rdf:resource="&howToBogota;Comprar"/>
         <tener rdf:resource="&howToBogota;Zapatos"/>
@@ -319,21 +324,6 @@
     
 
 
-    <!-- http://www.semanticweb.org/ontologies/2014/8/howToBogota.owl#Respuesta34209 -->
-
-    <owl:Thing rdf:about="&howToBogota;Respuesta34209">
-        <rdf:type rdf:resource="&howToBogota;Respuestas"/>
-        <rdf:type rdf:resource="&owl;NamedIndividual"/>
-        <calificacion rdf:datatype="&xsd;float">4,76</calificacion>
-        <tener rdf:resource="&howToBogota;Barato"/>
-        <respuesta_asociada_pregunta rdf:resource="&howToBogota;Como_comprar_zapatos_baratos?"/>
-        <Compuesto_de rdf:resource="&howToBogota;bajarse_en_estación_el_restrepo"/>
-        <Compuesto_de rdf:resource="&howToBogota;ir_a_transmilenio"/>
-        <Compuesto_de rdf:resource="&howToBogota;ir_al_local_Pepito"/>
-    </owl:Thing>
-    
-
-
     <!-- http://www.semanticweb.org/ontologies/2014/8/howToBogota.owl#Zapatos -->
 
     <owl:Thing rdf:about="&howToBogota;Zapatos">
@@ -348,8 +338,37 @@
     <owl:Thing rdf:about="&howToBogota;bajarse_en_estación_el_restrepo">
         <rdf:type rdf:resource="&howToBogota;Pasos"/>
         <rdf:type rdf:resource="&owl;NamedIndividual"/>
+        <calificacion rdf:datatype="&xsd;float">4.0</calificacion>
+        <textoPaso rdf:datatype="&xsd;string">Bajarse en estación el restrepo.</textoPaso>
         <paso_asociado_a rdf:resource="&howToBogota;ir_al_local_Pepito"/>
     </owl:Thing>
+    
+
+
+    <!-- http://www.semanticweb.org/ontologies/2014/8/howToBogota.owl#idPasos -->
+
+    <owl:NamedIndividual rdf:about="&howToBogota;idPasos">
+        <rdf:type rdf:resource="&howToBogota;ContIdentificador"/>
+        <cantidad>6</cantidad>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/ontologies/2014/8/howToBogota.owl#idPregunta -->
+
+    <owl:NamedIndividual rdf:about="&howToBogota;idPregunta">
+        <rdf:type rdf:resource="&howToBogota;ContIdentificador"/>
+        <cantidad>1</cantidad>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/ontologies/2014/8/howToBogota.owl#idUsuario -->
+
+    <owl:NamedIndividual rdf:about="&howToBogota;idUsuario">
+        <rdf:type rdf:resource="&howToBogota;ContIdentificador"/>
+        <cantidad>1</cantidad>
+    </owl:NamedIndividual>
     
 
 
@@ -358,7 +377,11 @@
     <owl:Thing rdf:about="&howToBogota;ir_a_transmilenio">
         <rdf:type rdf:resource="&howToBogota;Pasos"/>
         <rdf:type rdf:resource="&owl;NamedIndividual"/>
+        <calificacion rdf:datatype="&xsd;float">4.0</calificacion>
+        <textoPaso rdf:datatype="&xsd;string">Ir a transmilenio</textoPaso>
         <paso_asociado_a rdf:resource="&howToBogota;bajarse_en_estación_el_restrepo"/>
+        <paso_asociado_a rdf:resource="&howToBogota;paso4"/>
+        <paso_asociado_a rdf:resource="&howToBogota;paso_5"/>
     </owl:Thing>
     
 
@@ -368,7 +391,37 @@
     <owl:Thing rdf:about="&howToBogota;ir_al_local_Pepito">
         <rdf:type rdf:resource="&howToBogota;Pasos"/>
         <rdf:type rdf:resource="&owl;NamedIndividual"/>
+        <calificacion rdf:datatype="&xsd;float">4.0</calificacion>
+        <textoPaso rdf:datatype="&xsd;string">Ir al local de Pepito</textoPaso>
     </owl:Thing>
+    
+
+
+    <!-- http://www.semanticweb.org/ontologies/2014/8/howToBogota.owl#paso4 -->
+
+    <owl:NamedIndividual rdf:about="&howToBogota;paso4">
+        <rdf:type rdf:resource="&howToBogota;Pasos"/>
+        <calificacion rdf:datatype="&xsd;int">2</calificacion>
+        <textoPaso rdf:datatype="&xsd;string">Bajarse en estación X</textoPaso>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/ontologies/2014/8/howToBogota.owl#paso6 -->
+
+    <owl:NamedIndividual rdf:about="&howToBogota;paso6">
+        <rdf:type rdf:resource="&howToBogota;Pasos"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/ontologies/2014/8/howToBogota.owl#paso_5 -->
+
+    <owl:NamedIndividual rdf:about="&howToBogota;paso_5">
+        <rdf:type rdf:resource="&howToBogota;Pasos"/>
+        <calificacion rdf:datatype="&xsd;int">5</calificacion>
+        <textoPaso rdf:datatype="&xsd;string">Bajarse en estación Y</textoPaso>
+    </owl:NamedIndividual>
 </rdf:RDF>
 
 
