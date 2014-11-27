@@ -78,24 +78,27 @@ public class HowToBogotaEngine implements KnowledgeEngine{
 
 	@Override
 	public boolean createQuestion(String question) {
-//		POSTaggerAnswer tg=new POSTaggerAnswer(question);
-//		OntologyManager instance = OntologyManager.darInstancia();
-//		//TODO Buscar pregunta de acuerdo a similaridades. 
-//		ArrayList<String> res=instance.buscarPregunta(tg.getVerbs(), tg.getEntities());
-//		if(res.size()>0){
-//			return false;
-//		}else{
-//			instance.agregarPregunta("preg"+Math.random()*100, question, tg.getVerbs(), tg.getEntities(), tg.getAdjectives());
-//			return true;
-//		}
-		//TODO invalid question 
-		return false;
-	}
+		POSTaggerAnswer tg=new POSTaggerAnswer(question);
+		OntologyManager instance = OntologyManager.darInstancia();
 
+		String idQuestion=instance.buscarPreguntaSimilar(tg.getVerbs(), tg.getEntities(), tg.getAdjectives());
+
+		if(idQuestion!=null){
+			return false;
+		}else{
+			instance.agregarPregunta(question, tg.getVerbs(), tg.getEntities(), tg.getAdjectives());
+			return true;
+		}
+	}
+ 
 	@Override
 	public String addFirstStep(String question, String stepDescription) {
 		POSTaggerAnswer tg=new POSTaggerAnswer(stepDescription);
 		OntologyManager instance = OntologyManager.darInstancia();
+		String idQuestion=instance.buscarPreguntaExacta(tg.getVerbs(), tg.getEntities(), tg.getAdjectives());
+		if(idQuestion!=null){
+			
+		}
 		return instance.agregarPrimerPaso("preg"+Math.random()*100, question, stepDescription,tg.getVerbs(), tg.getEntities(), tg.getAdjectives());
 	}
 

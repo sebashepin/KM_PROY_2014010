@@ -131,11 +131,12 @@ public class OntologyManager {
 	
 	//Objetos nuestros
 	
-	public void agregarPregunta(String id,String pregunta, ArrayList<String>verbos, 
+	public void agregarPregunta(String pregunta, ArrayList<String>verbos, 
 			ArrayList<String> entidades, ArrayList<String>calificativos ){
 		dataset.begin(ReadWrite.WRITE);
 		ontModel= getOntModel();
-
+		//Obtener y actualizar los id de las preguntas
+		String id="paso"+darSiguienteId("idPregunta");
         Individual preg=createObject( HowToBogotaClass.PREGUNTAS, id);
   
        
