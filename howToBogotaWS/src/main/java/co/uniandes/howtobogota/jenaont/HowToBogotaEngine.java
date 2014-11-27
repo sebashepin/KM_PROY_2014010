@@ -93,29 +93,32 @@ public class HowToBogotaEngine implements KnowledgeEngine{
  
 	@Override
 	public String addFirstStep(String question, String stepDescription) {
-		POSTaggerAnswer tg=new POSTaggerAnswer(stepDescription);
+		POSTaggerAnswer tg=new POSTaggerAnswer(question);
 		OntologyManager instance = OntologyManager.darInstancia();
 		String idQuestion=instance.buscarPreguntaExacta(tg.getVerbs(), tg.getEntities(), tg.getAdjectives());
 		if(idQuestion!=null){
-			
+			return "";
+		}else{
+			return instance.agregarPrimerPaso(idQuestion, stepDescription);
 		}
-		return instance.agregarPrimerPaso("preg"+Math.random()*100, question, stepDescription,tg.getVerbs(), tg.getEntities(), tg.getAdjectives());
+		
 	}
 
 	@Override
 	public boolean createAndAnswerQuestion(String question, Object[] steps) {
-//		POSTaggerAnswer tg=new POSTaggerAnswer(question);
-//		OntologyManager instance = OntologyManager.darInstancia();
-//		ArrayList<String> res=instance.buscarPregunta(tg.getVerbs(), tg.getEntities());
-//		if(res.size()>0){
-//			return false;
-//		}else{
-//			String idPregunta="preg"+Math.random()*100;
-//			instance.agregarPregunta(idPregunta, question, tg.getVerbs(), tg.getEntities(), tg.getAdjectives());
-//			instance.agregarRespuesta("resp"+Math.random()*100, idPregunta, (String[])steps, tg.getVerbs(), tg.getEntities(), tg.getAdjectives());
-//			return true;
-//		}
-		return false;
+		
+		POSTaggerAnswer tg=new POSTaggerAnswer(question);
+		OntologyManager instance = OntologyManager.darInstancia();
+
+		String idQuestion=instance.buscarPreguntaSimilar(tg.getVerbs(), tg.getEntities(), tg.getAdjectives());
+
+		if(idQuestion!=null){
+			return false;
+		}else{
+			String questionId=instance.agregarPregunta(question, tg.getVerbs(), tg.getEntities(), tg.getAdjectives());
+			instance.agregarRespuesta(questionId, (String [])steps);
+			return true;
+		}
 	}
 
 }

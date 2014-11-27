@@ -131,12 +131,12 @@ public class OntologyManager {
 	
 	//Objetos nuestros
 	
-	public void agregarPregunta(String pregunta, ArrayList<String>verbos, 
+	public String agregarPregunta(String pregunta, ArrayList<String>verbos, 
 			ArrayList<String> entidades, ArrayList<String>calificativos ){
 		dataset.begin(ReadWrite.WRITE);
 		ontModel= getOntModel();
 		//Obtener y actualizar los id de las preguntas
-		String id="paso"+darSiguienteId("idPregunta");
+		String id="pregunta"+darSiguienteId("idPregunta");
         Individual preg=createObject( HowToBogotaClass.PREGUNTAS, id);
   
        
@@ -176,6 +176,7 @@ public class OntologyManager {
 		}
 		dataset.commit();
 		TDB.sync(dataset);
+		return id;
 	}
 	
 	public void agregarUsuario(String id, String nombre){
@@ -203,70 +204,39 @@ public class OntologyManager {
 		TDB.sync(dataset);
 	}
 	
-	public void agregarRespuesta(String idRespuesta, String idPregunta, String[] pasos,  ArrayList<String>verbos, 
-			ArrayList<String> entidades, ArrayList<String>calificativos ){
+	public void agregarRespuesta(String idPregunta, String[] pasos){
 		
 		dataset.begin(ReadWrite.WRITE);
 		ontModel= getOntModel();
 		
-		Individual res =createObject(HowToBogotaClass.RESPUESTAS, idRespuesta);
+
 		Individual preg = getObject(idPregunta);
-		
-		setProperty(preg, HowToBogotaProperty.PREGUNTA_ASOC_RTA ,res);
-		setProperty(res, HowToBogotaProperty.RTA_ASOC_PREGUNTA ,preg);
+
 		
 		Individual ant=null;
 		for(int i=0; i< pasos.length;i++){
 			
 			String paso= pasos[i];
-			String idPaso=idRespuesta+i;
-			Individual obj2 =createObject(HowToBogotaClass.PASOS, idPaso);
+			String idPaso="paso"+darSiguienteId("idPasos");
+			Individual step =createObject(HowToBogotaClass.PASOS, idPaso);
 			
-			setProperty(res, HowToBogotaProperty.COMPUESTO_DE, obj2);
-
 			Literal l = ontModel.createTypedLiteral(paso);
-			setProperty(obj2, HowToBogotaProperty.TEXTO_PASO, l);
+			setProperty(step, HowToBogotaProperty.TEXTO_PASO, l);
+			
+			Literal lNumCalificacion= ontModel.createTypedLiteral(0);
+			setProperty(step, HowToBogotaProperty.NUM_CALIFICACIONES, lNumCalificacion);
+	
 			
 			if(ant==null){
-				setProperty(res, HowToBogotaProperty.PRIMER_PASO, obj2);
-				ant=obj2;
+				setProperty(preg, HowToBogotaProperty.PREGUNTA_ASOC_RTA, step);
+				ant=step;
 			}else{
-				setProperty(ant, HowToBogotaProperty.PASO_ASOC_A, obj2 );
-				ant=obj2;
+				setProperty(ant, HowToBogotaProperty.PASO_ASOC_A, step );
+				ant=step;
 			}
 		}
 		
-		for(int i=0; i< verbos.size();i++){
-			String verb= verbos.get(i);
-			Individual obj = getObject(verb);
-			if(obj==null){
-				//Es necesario crearlo
-				obj =createObject(HowToBogotaClass.VERBOS, verb);
-			}
-			setProperty(obj, HowToBogotaProperty.VERBO_ASOC, res);
-		}
-		
-		for(int i=0; i< entidades.size();i++){
-			String ent= entidades.get(i);
-			Individual obj = getObject(ent);
-			if(obj==null){
-				//Es necesario crearlo
-				obj =createObject(HowToBogotaClass.ENTIDADES, ent);
-			}
-			setProperty(obj, HowToBogotaProperty.ENTIDAD_ASOC, res);
-			
-		}
-		
-		for(int i=0; i< calificativos.size();i++){
-			String calif= calificativos.get(i);
-			Individual obj = getObject(calif);
-			if(obj==null){
-				//Es necesario crearlo
-				obj =createObject(HowToBogotaClass.CALIFICATIVOS, calif);
-			}
-			setProperty(obj, HowToBogotaProperty.CALIFICATIVO_ASOC, res);
-			
-		}
+	
 		dataset.commit();
 		TDB.sync(dataset);
 	}
@@ -465,60 +435,23 @@ public class OntologyManager {
 		return res;
 	}
 	
-    public String agregarPrimerPaso(String idRespuesta, String idPregunta, String descPaso,  ArrayList<String>verbos, 
-			ArrayList<String> entidades, ArrayList<String>calificativos ){
+    public String agregarPrimerPaso(String idPregunta, String descPaso){
 		
 		dataset.begin(ReadWrite.WRITE);
 		ontModel= getOntModel();
 		
-		Individual res =createObject(HowToBogotaClass.RESPUESTAS, idRespuesta);
 		Individual preg = getObject(idPregunta);
-		
-		setProperty(preg, HowToBogotaProperty.PREGUNTA_ASOC_RTA ,res);
-		setProperty(res, HowToBogotaProperty.RTA_ASOC_PREGUNTA ,preg);
-		
-		//TODO
-		String idPaso=idRespuesta+0;
-		Individual obj2 =createObject(HowToBogotaClass.PASOS, idPaso);
+
+		String idPaso="paso"+darSiguienteId("idPasos");
+		Individual step =createObject(HowToBogotaClass.PASOS, idPaso);
 			
-		setProperty(res, HowToBogotaProperty.COMPUESTO_DE, obj2);
+		setProperty(preg, HowToBogotaProperty.PREGUNTA_ASOC_RTA, step);
 
 		Literal l = ontModel.createTypedLiteral(descPaso);
-		setProperty(obj2, HowToBogotaProperty.TEXTO_PASO, l);
+		setProperty(step, HowToBogotaProperty.TEXTO_PASO, l);
+		Literal lNumCalificacion= ontModel.createTypedLiteral(0);
+		setProperty(step, HowToBogotaProperty.NUM_CALIFICACIONES, lNumCalificacion);
 	
-		setProperty(res, HowToBogotaProperty.PRIMER_PASO, obj2);
-		
-		for(int i=0; i< verbos.size();i++){
-			String verb= verbos.get(i);
-			Individual obj = getObject(verb);
-			if(obj==null){
-				//Es necesario crearlo
-				obj =createObject(HowToBogotaClass.VERBOS, verb);
-			}
-			setProperty(obj, HowToBogotaProperty.VERBO_ASOC, res);
-		}
-		
-		for(int i=0; i< entidades.size();i++){
-			String ent= entidades.get(i);
-			Individual obj = getObject(ent);
-			if(obj==null){
-				//Es necesario crearlo
-				obj =createObject(HowToBogotaClass.ENTIDADES, ent);
-			}
-			setProperty(obj, HowToBogotaProperty.ENTIDAD_ASOC, res);
-			
-		}
-		
-		for(int i=0; i< calificativos.size();i++){
-			String calif= calificativos.get(i);
-			Individual obj = getObject(calif);
-			if(obj==null){
-				//Es necesario crearlo
-				obj =createObject(HowToBogotaClass.CALIFICATIVOS, calif);
-			}
-			setProperty(obj, HowToBogotaProperty.CALIFICATIVO_ASOC, res);
-			
-		}
 		dataset.commit();
 		TDB.sync(dataset);
 		return idPaso;
@@ -829,6 +762,9 @@ public class OntologyManager {
 		Literal lDesc = ontModel.createTypedLiteral(stepDescription);
 		setProperty(pasoA, HowToBogotaProperty.TEXTO_PASO, lDesc);
 	
+		Literal lNumCalificacion= ontModel.createTypedLiteral(0);
+		setProperty(pasoA, HowToBogotaProperty.NUM_CALIFICACIONES, lNumCalificacion);
+		
 		//Hacer el enlace con su paso anterior
 		Individual prePaso=getObject(previousStepId);
 		setProperty(prePaso, HowToBogotaProperty.PASO_ASOC_A, pasoA );
@@ -865,10 +801,11 @@ public class OntologyManager {
 			
 			OntProperty  pCalificacion= ontModel.getOntProperty( URI +HowToBogotaProperty.CALIFICACION.getName());
 			Statement sCalificacion=paso.getProperty(pCalificacion);
+			OntProperty  pNumCalificacion= ontModel.getOntProperty( URI +HowToBogotaProperty.NUM_CALIFICACIONES.getName());
+
 			if(sCalificacion!=null){
 				float curCalificacion=sCalificacion.getFloat();
 				
-				OntProperty  pNumCalificacion= ontModel.getOntProperty( URI +HowToBogotaProperty.NUM_CALIFICACIONES.getName());
 				Statement sNumCalificacion=paso.getProperty(pNumCalificacion);
 				int numCalificaciones=sNumCalificacion.getInt();
 				
@@ -885,8 +822,7 @@ public class OntologyManager {
 				Literal lNumCalificacion= ontModel.createTypedLiteral(numCalificaciones);
 				paso.addProperty(pNumCalificacion, lNumCalificacion);
 			}else{
-				OntProperty  pNumCalificacion= ontModel.getOntProperty( URI +HowToBogotaProperty.NUM_CALIFICACIONES.getName());
-				Statement sNumCalificacion=paso.getProperty(pNumCalificacion);
+								Statement sNumCalificacion=paso.getProperty(pNumCalificacion);
 				if(sNumCalificacion!=null){
 					paso.removeProperty(pNumCalificacion, sNumCalificacion.getObject());
 				}
