@@ -125,7 +125,6 @@
     <!-- http://www.semanticweb.org/ontologies/2014/8/howToBogota.owl#verbo_complementado_por -->
 
     <owl:ObjectProperty rdf:about="&howToBogota;verbo_complementado_por">
-        <rdf:type rdf:resource="&owl;TransitiveProperty"/>
         <rdfs:range rdf:resource="&howToBogota;Calificativos"/>
         <rdfs:domain rdf:resource="&howToBogota;Verbos"/>
     </owl:ObjectProperty>
@@ -319,6 +318,7 @@
         <tener rdf:resource="&howToBogota;Barato"/>
         <tener rdf:resource="&howToBogota;Comprar"/>
         <tener rdf:resource="&howToBogota;Zapatos"/>
+        <pregunta_asociada_respuesta rdf:resource="&howToBogota;ir_a_transmilenio"/>
     </owl:NamedIndividual>
     
 

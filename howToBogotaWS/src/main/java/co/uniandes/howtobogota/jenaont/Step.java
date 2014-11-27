@@ -69,17 +69,18 @@ public class Step {
 	}
 	
 	public String getNeighborhoodString() {
-	      int neighbors = 0;
+		char[] neighbors = "0000".toCharArray();
 	      if (upStep != null)
-	        neighbors += 1000;
+	        neighbors[0] = '1';
 	      if (nextStep != null)
-	        neighbors += 0100;
+	        neighbors[1] = '1';
 	      if (downStep != null)
-	        neighbors += 0010;
+	        neighbors[2] = '1';
 	      if (previousStep != null)
-	        neighbors += 0001;
+	        neighbors[3] = '1';
 
-	      return "" + neighbors;
+	      return "" + String.valueOf(neighbors);
+	    
 	    }
 
 	    public String getStepByDirection(STEP_NEIGHBOR stepDirection) {

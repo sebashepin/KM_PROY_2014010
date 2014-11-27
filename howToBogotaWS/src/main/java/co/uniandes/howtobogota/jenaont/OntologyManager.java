@@ -3,8 +3,6 @@ package co.uniandes.howtobogota.jenaont;
 import java.io.File;
 import java.util.ArrayList;
 
-import co.uniandes.howtobogota.engine.KnowledgeEngine.STEP_NEIGHBOR;
-
 import com.hp.hpl.jena.ontology.Individual;
 import com.hp.hpl.jena.ontology.OntClass;
 import com.hp.hpl.jena.ontology.OntModel;
@@ -23,9 +21,7 @@ import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.ModelFactory;
 import com.hp.hpl.jena.rdf.model.RDFNode;
 import com.hp.hpl.jena.rdf.model.Resource;
-import com.hp.hpl.jena.rdf.model.SimpleSelector;
 import com.hp.hpl.jena.rdf.model.Statement;
-import com.hp.hpl.jena.rdf.model.StmtIterator;
 import com.hp.hpl.jena.tdb.TDB;
 import com.hp.hpl.jena.tdb.TDBFactory;
 
@@ -277,37 +273,95 @@ public class OntologyManager {
 	public Step darRespuesta(String idPregunta){
 		dataset.begin(ReadWrite.READ);
 		ontModel= getOntModel();
-		Individual us = getObject(idPregunta);
-		Step first=null;
-		if(us!=null){
 
-			OntProperty ptAsociadaRta = ontModel.getOntProperty( URI +HowToBogotaProperty.PREGUNTA_ASOC_RTA.getName());
-			StmtIterator itert = ontModel.listStatements(
-				    new SimpleSelector(us, ptAsociadaRta, (RDFNode) null));
-			int i=0;
-			
-			String secondStep=null;
-		    while (itert.hasNext() && i <2) {
-		    	Resource resp=itert.next().getObject().asResource();
-		        System.out.println("  " + resp);
-		        OntProperty pPrimerPaso = ontModel.getOntProperty( URI +HowToBogotaProperty.PRIMER_PASO.getName());
-		        Resource step =resp.getProperty(pPrimerPaso).getResource();
-		      
-		        if(i==0){
-		        	OntProperty  pDescrip= ontModel.getOntProperty( URI +HowToBogotaProperty.TEXTO_PASO.getName());
-		        	first=new Step(step.getLocalName(), step.getProperty(pDescrip).getString());
-		        	OntProperty  pSiguiente= ontModel.getOntProperty( URI +HowToBogotaProperty.PASO_ASOC_A.getName());
-		        	first.setNextStep(step.getProperty(pSiguiente).getResource().getLocalName());
-		        }else{
-		        	secondStep=step.getLocalName();
-		        	first.setDownStep(secondStep);
-		        }
-		        i++;
-		    }
-		}
+		Step s=null;
+		String queryString = 
+        		"PREFIX uri:<"+URI +">"+
+        		"SELECT ?x ?descrip ?next " +
+        		"WHERE {" +
+        		"      uri:"+idPregunta +" uri:"+HowToBogotaProperty.PREGUNTA_ASOC_RTA.getName()+" ?x ." +
+        		"      ?x uri:"+HowToBogotaProperty.CALIFICACION.getName()+"  ?cal . " +
+        		"      ?x uri:"+HowToBogotaProperty.TEXTO_PASO.getName()+" ?descrip . " +
+        		" OPTIONAL { ?x uri:"+HowToBogotaProperty.PASO_ASOC_A.getName()+" ?next }"+
+        		"} ORDER BY DESC(?cal) LIMIT 2";
+        
+		Query query = QueryFactory.create(queryString);
+
+    	QueryExecution qe = QueryExecutionFactory.create(query, ontModel);
+    	ResultSet results = qe.execSelect();
+    	
+		String idStep=null;
+		String stepDesc=null;
+		String idNext=null;
+    	boolean gotIn=false;
+    	int i=0;
+    	while(results.hasNext()){
+    		gotIn=true;
+    		QuerySolution qr= results.next();
+    		if(i==0){
+	    		idStep=qr.getResource("x").getLocalName();
+	    		stepDesc=qr.getLiteral("descrip").getString();
+				if(qr.getResource("next")!=null){
+					idNext=qr.getResource("next").getLocalName();
+				}
+    		}
+    		i++;
+    	}
+    	
+    	if(gotIn){
+    		if(idStep!=null){
+	    		s= new Step(idStep, stepDesc);
+	    		s.setNextStep(idNext);
+	    		if(i>1){
+		    		s.setDownStep(idStep);
+		    	}
+	    	}
+    	}else{
+    		//Ningún paso tiene calificación
+    		//Entrega un paso aleatorio 
+    		queryString = 
+            		"PREFIX uri:<"+URI +">"+
+                    		"SELECT ?x ?descrip ?next " +
+                    		"WHERE {" +
+                    		"      uri:"+idPregunta +" uri:"+HowToBogotaProperty.PREGUNTA_ASOC_RTA+" ?x ." +
+                    		"      ?x uri:"+HowToBogotaProperty.TEXTO_PASO.getName()+" ?descrip . " +
+                    		" OPTIONAL { ?x uri:"+HowToBogotaProperty.PASO_ASOC_A.getName()+" ?next }"+
+                    		"} LIMIT 2";
+            
+            query = QueryFactory.create(queryString);
+
+        	qe = QueryExecutionFactory.create(query, ontModel);
+        	results = qe.execSelect();
+        	gotIn=false;
+        	i=0;
+        	while(results.hasNext()){
+        		gotIn=true;
+        		QuerySolution qr= results.next();
+        		if(i==0){
+    	    		idStep=qr.getResource("x").getLocalName();
+    				stepDesc=qr.getResource("descrip").getLocalName();
+    				if(qr.getResource("next")!=null){
+    					idNext=qr.getResource("next").getLocalName();
+    				}
+        		}
+        		i++;
+        	}
+        	
+        	if(gotIn){
+        		if(idStep!=null){
+    	    		s= new Step(idStep, stepDesc);
+    	    		s.setNextStep(idNext);
+    	    		if(i>1){
+    		    		s.setDownStep(idStep);
+    		    	}
+    	    	}
+        	}
+    	}
+    		
+    	
 		dataset.commit();
 		TDB.sync(dataset);
-		return first;
+		return s;
 	}
 
 	public String buscarPreguntaSimilar(ArrayList<String>verbos, 
@@ -358,11 +412,11 @@ public class OntologyManager {
 
     	QueryExecution qe = QueryExecutionFactory.create(query, ontModel);
     	ResultSet results = qe.execSelect();
-    	results.hasNext();
-    	QuerySolution qr= results.next();
-    	res=qr.get("x").asResource().getLocalName();
-    	System.out.println(res);
-
+    	while(results.hasNext()){
+    		QuerySolution qr= results.next();
+    		res=qr.get("x").asResource().getLocalName();
+    		System.out.println(res);
+    	}
 		dataset.commit();
 		TDB.sync(dataset);
 		return res;
@@ -470,40 +524,108 @@ public class OntologyManager {
     }
     
     
-	public void getNextStepNeighbor(String stepId){
+	public Step getNextStepNeighbor(String stepId){
 		dataset.begin(ReadWrite.READ);
 		ontModel= getOntModel();
-		
+		Step s=null;
+		String idStep=null;
+		String stepDesc=null;
+		String idNext=null;
         String queryString = 
         		"PREFIX uri:<"+URI +">"+
-        		"SELECT ?x " +
+        		"SELECT ?x ?next ?descrip " +
         		"WHERE {" +
         		"      uri:"+stepId+" uri:"+HowToBogotaProperty.PASO_ASOC_A.getName()+" ?x . " +
-        		"      ?x uri:"+HowToBogotaProperty.CALIFICACION.getName()+" ?cal . " + 
+        		"      ?x uri:"+HowToBogotaProperty.CALIFICACION.getName()+" ?cal . " +
+        		"      ?x uri:"+HowToBogotaProperty.TEXTO_PASO.getName()+" ?descrip . " +
+        		" OPTIONAL { ?x uri:"+HowToBogotaProperty.PASO_ASOC_A.getName()+" ?next }"+
         		"} "+
-        		"ORDER BY DESC(?cal) LIMIT 1"; 
+        		"ORDER BY DESC(?cal) LIMIT 2"; 
 
         
       
         
         Query query = QueryFactory.create(queryString);
-
+        
     	QueryExecution qe = QueryExecutionFactory.create(query, ontModel);
     	ResultSet results = qe.execSelect();
+    	int i =0;
+    	boolean gotIn=false;
     	while(results.hasNext()){
+    		gotIn=true;
     		QuerySolution qr= results.next();
-    		System.out.println(qr.getResource("x").getLocalName());
+    		if(i==0){
+    			idStep=qr.getResource("x").getLocalName();
+    			stepDesc=qr.getLiteral("descrip").getString();
+    			if(qr.getResource("next")!=null){
+    				idNext=qr.getResource("next").getLocalName();
+    			}
+    		}
+    		i++;
+    	}
+    	
+    	if(gotIn){
+	    	if(idStep!=null){
+	    		s= new Step(idStep, stepDesc);
+	    		s.setPreviousStep(stepId);
+	    		s.setNextStep(idNext);
+	    		if(i>1){
+	    			s.setDownStep(stepId);
+	    		}
+	    	}
+	    	
+    	}else{
+    		//Ningún paso tiene calificación
+    		queryString = 
+            		"PREFIX uri:<"+URI +">"+
+            		"SELECT ?x ?next ?descrip " +
+            		"WHERE {" +
+            		"      uri:"+stepId+" uri:"+HowToBogotaProperty.PASO_ASOC_A.getName()+" ?x . " +
+            		"      ?x uri:"+HowToBogotaProperty.TEXTO_PASO.getName()+" ?descrip . " +
+            		" OPTIONAL { ?x uri:"+HowToBogotaProperty.PASO_ASOC_A.getName()+" ?next }"+
+            		"} "+
+            		" LIMIT 2";        
+          
+            query = QueryFactory.create(queryString);
+
+        	qe = QueryExecutionFactory.create(query, ontModel);
+        	results = qe.execSelect();
+        	i =0;
+        	gotIn=false;
+        	while(results.hasNext()){
+        		gotIn=true;
+        		QuerySolution qr= results.next();
+        		if(i==0){
+        			idStep=qr.getResource("x").getLocalName();
+        			stepDesc=qr.getLiteral("descrip").getString();
+        			if(qr.getResource("next")!=null){
+        				idNext=qr.getResource("next").getLocalName();
+        			}
+        		}
+        		i++;
+        	}
+        	
+        	if(idStep!=null){
+	    		s= new Step(idStep, stepDesc);
+	    		s.setPreviousStep(stepId);
+	    		s.setNextStep(idNext);
+	    		if(i>1){
+	    			s.setDownStep(stepId);
+	    		}
+	    	}
+        	
     	}
 		dataset.commit();
 		TDB.sync(dataset);
-
+		return s;
 	}
 	
-	public void getUpDownStepNeighbor(String stepId, boolean up){
+	public Step getUpDownStepNeighbor(String stepId, boolean up){
 		
 		dataset.begin(ReadWrite.READ);
 		ontModel= getOntModel();
 		
+		Step s=null;
 		String order="DESC";
 		if(!up){
 			order="ASC";
@@ -512,11 +634,13 @@ public class OntologyManager {
 		//Por ahora se tienen en cuenta todos los predecesores
         String queryString = 
         		"PREFIX uri:<"+URI +">"+
-        		"SELECT ?x " +
+        		"SELECT ?x ?next ?descrip " +
         		"WHERE {" +
         		"      ?pred uri:"+HowToBogotaProperty.PASO_ASOC_A.getName()+" uri:"+stepId+" ." +
         		"      ?pred uri:"+HowToBogotaProperty.PASO_ASOC_A.getName()+" ?x ." +
+        		"      ?x uri:"+HowToBogotaProperty.TEXTO_PASO.getName()+" ?descrip . " +
         		"      ?x uri:"+HowToBogotaProperty.CALIFICACION.getName()+" ?cal . " + 
+        		" OPTIONAL { ?x uri:"+HowToBogotaProperty.PASO_ASOC_A.getName()+" ?next }"+
         		"} "+
         		"ORDER BY "+order+"(?cal)"; 
         
@@ -525,8 +649,11 @@ public class OntologyManager {
     	QueryExecution qe = QueryExecutionFactory.create(query, ontModel);
     	ResultSet results = qe.execSelect();
     	
-    	String idStep=null;
+		String idStep=null;
+		String stepDesc=null;
+		String idNext=null;
     	boolean gotIn=false;
+    	int i=0;
     	while(results.hasNext()){
     		gotIn=true;
     		QuerySolution qr= results.next();
@@ -535,57 +662,105 @@ public class OntologyManager {
     			break;
     		}else{
     			idStep=rtaId;
+    			stepDesc=qr.getLiteral("descrip").getString();
+    			if(qr.getResource("next")!=null){
+    				idNext=qr.getResource("next").getLocalName();
+    			}
     		}
+    		i++;
     	}
     	if(gotIn){
-	    	if(idStep==null){
-	    		System.out.println("El paso no tiene "+(up?"up":"down"));
-	    	}else{
-	    		System.out.println(idStep);
+    		if(idStep!=null){
+	    		s= new Step(idStep, stepDesc);
+	    		s.setPreviousStep(stepId);
+	    		s.setNextStep(idNext);
+	    		if(up){
+	    			s.setDownStep(stepId);
+	    			if(i>2){
+		    			s.setUpStep(stepId);
+		    		}
+	    		}else{
+	    			s.setUpStep(stepId);
+	    			if(i>2){
+		    			s.setDownStep(stepId);
+		    		}
+	    		}
+	    		
 	    	}
-    	}else{
+    	}if(!gotIn || idStep==null){
     		//Ningún paso tiene calificación
     		//Entrega un paso aleatorio 
     		queryString = 
             		"PREFIX uri:<"+URI +">"+
-            		"SELECT ?x " +
+            		"SELECT ?x ?next ?descrip "  +
             		"WHERE {" +
             		"      ?pred uri:"+HowToBogotaProperty.PASO_ASOC_A.getName()+" uri:"+stepId+" ." +
             		"      ?pred uri:"+HowToBogotaProperty.PASO_ASOC_A.getName()+" ?x ." +
-            		"} "+
-            		"ORDER BY "+order+"(?cal)"; 
+            		"      ?x uri:"+HowToBogotaProperty.TEXTO_PASO.getName()+" ?descrip . " +
+            		" OPTIONAL { ?x uri:"+HowToBogotaProperty.PASO_ASOC_A.getName()+" ?next }"+
+            		"} LIMIT 3"; 
             
             query = QueryFactory.create(queryString);
 
         	qe = QueryExecutionFactory.create(query, ontModel);
         	results = qe.execSelect();
+        	gotIn=false;
+        	i=0;
         	while(results.hasNext()){
+        		gotIn=true;
         		QuerySolution qr= results.next();
         		String rtaId=qr.getResource("x").getLocalName();
         		if(!rtaId.equals(stepId)){
         			idStep=rtaId;
-        			break;
+        			stepDesc=qr.getLiteral("descrip").getString();
+        			if(qr.getResource("next")!=null){
+        				idNext=qr.getResource("next").getLocalName();
+        			}
         		}
+        		i++;
+        	}
+        	
+        	if(gotIn){
+        		if(idStep!=null){
+    	    		s= new Step(idStep, stepDesc);
+    	    		s.setPreviousStep(stepId);
+    	    		s.setNextStep(idNext);
+    	    		if(up){
+    	    			s.setDownStep(stepId);
+    	    			if(i>2){
+    		    			s.setUpStep(stepId);
+    		    		}
+    	    		}else{
+    	    			s.setUpStep(stepId);
+    	    			if(i>2){
+    		    			s.setDownStep(stepId);
+    		    		}
+    	    		}
+    	    		
+    	    	}
         	}
     	}
 		dataset.commit();
 		TDB.sync(dataset);
+		return s;
 
 	}
 	
-	public void getPrevStepNeighbor(String stepId){
+	public Step getPrevStepNeighbor(String stepId){
 		
 		dataset.begin(ReadWrite.READ);
 		ontModel= getOntModel();
+		
 		
 		//TODO: Tener en cuenta que puede tener muchos predecesores el predecesor. 
 		//Por ahora se escoge el predecesor con mayor calificación
         String queryString = 
         		"PREFIX uri:<"+URI +">"+
-        		"SELECT ?x " +
+        		"SELECT ?x ?descrip " +
         		"WHERE {" +
         		"      ?x uri:"+HowToBogotaProperty.PASO_ASOC_A.getName()+" uri:"+stepId+" ." +
         		"      ?x uri:"+HowToBogotaProperty.CALIFICACION.getName()+" ?cal . " + 
+        		"      ?x uri:"+HowToBogotaProperty.TEXTO_PASO.getName()+" ?descrip . " +
         		"} "+
         		"ORDER BY DESC(?cal) LIMIT 1"; 
         
@@ -593,17 +768,50 @@ public class OntologyManager {
 
     	QueryExecution qe = QueryExecutionFactory.create(query, ontModel);
     	ResultSet results = qe.execSelect();
+    	String idStep=null;
+		String stepDesc=null;
+    	Step s=null;
     	while(results.hasNext()){
     		QuerySolution qr= results.next();
-    		String rtaId=qr.getResource("x").getLocalName();
-    		if(rtaId.equals(stepId)){
-    			System.out.println("No hay");
-    		}else{
-    		System.out.println(rtaId);
-    		}
+    		idStep=qr.getResource("x").getLocalName();
+    		stepDesc=qr.getLiteral("descrip").getString();
     	}
+    	
+    	if(idStep!=null){
+    		s= new Step(idStep, stepDesc);
+    		s.setNextStep(stepId);
+    	}else{
+    		queryString = 
+            		"PREFIX uri:<"+URI +">"+
+            		"SELECT ?x ?descrip " +
+            		"WHERE {" +
+            		"      ?x uri:"+HowToBogotaProperty.PASO_ASOC_A.getName()+" uri:"+stepId+" ." +
+            		"      ?x uri:"+HowToBogotaProperty.TEXTO_PASO.getName()+" ?descrip . " +
+            		"} "+
+            		"LIMIT 1"; 
+            
+            query = QueryFactory.create(queryString);
+
+        	qe = QueryExecutionFactory.create(query, ontModel);
+        	results = qe.execSelect();
+        	idStep=null;
+    		stepDesc=null;
+        	s=null;
+        	while(results.hasNext()){
+        		QuerySolution qr= results.next();
+        		idStep=qr.getResource("x").getLocalName();
+        		stepDesc=qr.getLiteral("descrip").getString();
+        	}
+        	
+        	if(idStep!=null){
+        		s= new Step(idStep, stepDesc);
+        		s.setNextStep(stepId);
+        	}
+    	}
+    	
 		dataset.commit();
 		TDB.sync(dataset);
+		return s;
 
 	}
 	
@@ -737,11 +945,11 @@ public class OntologyManager {
 			if(iVerbo==null){
 				iVerbo =createObject(HowToBogotaClass.VERBOS, verbo);
 			}
-			if(iCalif==null){
-				iCalif =createObject(HowToBogotaClass.CALIFICATIVOS, calificativo);
-			}
-			
-			iVerbo.addProperty(pVerboComp, iCalif);
+//			if(iCalif==null){
+//				iCalif =createObject(HowToBogotaClass.CALIFICATIVOS, calificativo);
+//			}
+//			
+//			iVerbo.addProperty(pVerboComp, iCalif);
 		}
 		dataset.commit();
 		TDB.sync(dataset);

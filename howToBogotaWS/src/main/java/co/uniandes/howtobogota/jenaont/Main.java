@@ -22,6 +22,11 @@ package co.uniandes.howtobogota.jenaont;
 import java.util.ArrayList;
 import java.util.Iterator;
 
+import co.uniandes.howtobogota.engine.Answer;
+import co.uniandes.howtobogota.engine.AnswerResponse;
+import co.uniandes.howtobogota.engine.AnswerResponse.STATUS;
+import co.uniandes.howtobogota.engine.KnowledgeEngine.STEP_NEIGHBOR;
+
 import com.hp.hpl.jena.ontology.*;
 import com.hp.hpl.jena.query.Dataset;
 import com.hp.hpl.jena.query.ReadWrite;
@@ -44,10 +49,13 @@ public class Main {
         POSTaggerAnswer tg=new POSTaggerAnswer(line);
     	
     	OntologyManager instance = OntologyManager.darInstancia();
-    	System.out.println(instance.esValido("Comprar", "Cerca"));
+    	long n= System.currentTimeMillis();
+        System.out.println(getStepNeighbor("paso_5", 	STEP_NEIGHBOR.NEXT));
+        System.out.println(System.currentTimeMillis()-n);
+        
     	//String prg=instance.buscarPreguntaSimilar(tg.getVerbs(), tg.getEntities(), tg.getAdjectives());
  
-//    	instance.agregarPregunta("pregunta1", line, tg.getVerbs(), tg.getEntities(), tg.getAdjectives());
+    	//instance.agregarPregunta("pregunta1", line, tg.getVerbs(), tg.getEntities(), tg.getAdjectives());
 //    	String [] c= {"bajarse_en_estación_el_restrepo"};
 //    	instance.calificarCamino(c, 4);
     	//instance. addStep("paso_5", null, "ir_al_local_Pepito");
@@ -233,7 +241,37 @@ public class Main {
        
         
        
-    }
+    }	public static AnswerResponse getStepNeighbor(String stepId,
+			STEP_NEIGHBOR stepDirection) {
+		AnswerResponse result;
+		OntologyManager instance = OntologyManager.darInstancia();
+		Step step=null;
+		 switch (stepDirection) {
+		 case UP: 
+			 step=instance.getUpDownStepNeighbor(stepId, true);
+			 break;
+		 case DOWN:
+			 step=instance.getUpDownStepNeighbor(stepId, false);
+			 break;
+		 case NEXT:
+			 step=instance.getNextStepNeighbor(stepId);
+			 break;
+		 case PREVIOUS:
+			 step=instance.getPrevStepNeighbor(stepId);
+			 break;
+		 }
+	      if (step == null) {
+	        result = new AnswerResponse(STATUS.NEW, null);
+	      } else {
+	        result =
+	            new AnswerResponse(STATUS.OK, new Answer(step.getStepId(), step.getStepDescription(),
+	                step.getNeighborhoodString()));
+	        System.out.println(step.getStepId()+ " -"+ step.getStepDescription()+ "-"+
+	                step.getNeighborhoodString());
+	      }
+		return result;
+	}
+
     
     /**
     public static void describeClass(OntModel m){
