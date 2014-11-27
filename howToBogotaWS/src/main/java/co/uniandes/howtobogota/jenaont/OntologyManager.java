@@ -310,10 +310,9 @@ public class OntologyManager {
 		return first;
 	}
 
-
-	public ArrayList<String> buscarPregunta(ArrayList<String>verbos, 
-			ArrayList<String> entidades){
-		ArrayList<String> res=new ArrayList<String>();
+	public String buscarPreguntaSimilar(ArrayList<String>verbos, 
+			ArrayList<String> entidades, ArrayList<String> calificativos){
+		String res=null;
 		dataset.begin(ReadWrite.READ);
 		ontModel= getOntModel();
 		
@@ -321,7 +320,65 @@ public class OntologyManager {
         		"PREFIX uri:<"+URI +">"+
         		"SELECT ?x " +
         		"WHERE {" +
-        		"      ?x <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> ?x . "; 
+        		"      ?x <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> uri:"+HowToBogotaClass.PREGUNTAS.getName() +" ."; 
+
+     
+        for(int i=0; i<verbos.size();i++){
+        	   queryString+="{";
+        	queryString=queryString+
+        		"		uri:"+verbos.get(i)+"	uri:"+HowToBogotaProperty.VERBO_ASOC.getName()+"	?x . ";
+            queryString+="} UNION{";
+            queryString+="		?v	uri:"+HowToBogotaProperty.VERBO_ASOC.getName()+"	?x . ";
+            queryString+="		uri:"+verbos.get(i)+"	uri:"+HowToBogotaProperty.VERBO_SINON.getName()+"	?v. ";
+            queryString=queryString+
+            		"      }";
+        }
+        
+        for(int i=0; i<entidades.size();i++){
+        	queryString=queryString+
+        		"		uri:"+entidades.get(i)+"	uri:"+HowToBogotaProperty.ENTIDAD_ASOC.getName()+"	?x . ";
+        }
+
+        for(int i=0; i<calificativos.size();i++){
+     	   queryString+="{";
+     	queryString=queryString+
+     		"		uri:"+calificativos.get(i)+"	uri:"+HowToBogotaProperty.CALIFICATIVO_ASOC.getName()+"	?x . ";
+         queryString+="} UNION{";
+         queryString+="		?v	uri:"+HowToBogotaProperty.CALIFICATIVO_ASOC.getName()+"	?x . ";
+         queryString+="		uri:"+calificativos.get(i)+"	uri:"+HowToBogotaProperty.CALIFICATIVO_SINON.getName()+"	?v. ";
+         queryString=queryString+
+         		"      }";
+        }
+
+        queryString=queryString+
+        		"      }";
+
+        System.out.println(queryString);
+        Query query = QueryFactory.create(queryString);
+
+    	QueryExecution qe = QueryExecutionFactory.create(query, ontModel);
+    	ResultSet results = qe.execSelect();
+    	results.hasNext();
+    	QuerySolution qr= results.next();
+    	res=qr.get("x").asResource().getLocalName();
+    	System.out.println(res);
+
+		dataset.commit();
+		TDB.sync(dataset);
+		return res;
+	}
+	
+	public String buscarPreguntaExacta(ArrayList<String>verbos, 
+			ArrayList<String> entidades, ArrayList<String> calificativos){
+		String res=null;
+		dataset.begin(ReadWrite.READ);
+		ontModel= getOntModel();
+		
+        String queryString = 
+        		"PREFIX uri:<"+URI +">"+
+        		"SELECT ?x " +
+        		"WHERE {" +
+        		"      ?x <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> uri:"+HowToBogotaClass.PREGUNTAS.getName() +" ."; 
 
         
         for(int i=0; i<verbos.size();i++){
@@ -332,18 +389,22 @@ public class OntologyManager {
         	queryString=queryString+
         		"		uri:"+entidades.get(i)+"	uri:"+HowToBogotaProperty.ENTIDAD_ASOC.getName()+"	?x . ";
         }
+        for(int i=0; i<calificativos.size();i++){
+        	queryString=queryString+
+        		"		uri:"+calificativos.get(i)+"	uri:"+HowToBogotaProperty.CALIFICATIVO_ASOC.getName()+"	?x . ";
+        }
         queryString=queryString+
-        		"      }";
-        
-        
+        		"      } LIMIT 1";
+
         Query query = QueryFactory.create(queryString);
 
     	QueryExecution qe = QueryExecutionFactory.create(query, ontModel);
     	ResultSet results = qe.execSelect();
     	while(results.hasNext()){
-    		QuerySolution qr= results.next();
-    		res.add(qr.get("x").asResource().getLocalName());
+    	QuerySolution qr= results.next();
+    	res=qr.get("x").asResource().getLocalName();
     	}
+
 		dataset.commit();
 		TDB.sync(dataset);
 		return res;

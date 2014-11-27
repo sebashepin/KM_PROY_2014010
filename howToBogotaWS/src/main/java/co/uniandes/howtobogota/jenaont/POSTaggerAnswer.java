@@ -153,12 +153,14 @@ private void tagData()
     for (int i = 0; i < tagging.size(); ++i){
     	System.out.print(tagging.token(i)+"->"+PorterStemmerTokenizerFactory.stem(tagging.token(i) )+ "_" + tagging.tag(i) + " ");
 
+    	if(tagging.token(i).length()>1){
     	if(ADVERB_TAGS.contains(tagging.tag(i))){
     		adjectives.add(PorterStemmerTokenizerFactory.stem(tagging.token(i)));
     	}else if(VERB_TAGS.contains(tagging.tag(i))){
     		verbs.add(PorterStemmerTokenizerFactory.stem(tagging.token(i)));
     	}else if(ENTITY_TAGS.contains(tagging.tag(i))){
     		entities.add(PorterStemmerTokenizerFactory.stem(tagging.token(i)));
+    	}
     	}
     	
     }

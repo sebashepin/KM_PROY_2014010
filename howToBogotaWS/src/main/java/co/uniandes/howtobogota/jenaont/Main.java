@@ -44,9 +44,11 @@ public class Main {
         POSTaggerAnswer tg=new POSTaggerAnswer(line);
     	
     	OntologyManager instance = OntologyManager.darInstancia();
-    	instance.agregarPregunta("pregunta1", line, tg.getVerbs(), tg.getEntities(), tg.getAdjectives());
-    	String [] c= {"bajarse_en_estación_el_restrepo"};
-    	instance.calificarCamino(c, 4);
+    	//String prg=instance.buscarPreguntaSimilar(tg.getVerbs(), tg.getEntities(), tg.getAdjectives());
+ 
+//    	instance.agregarPregunta("pregunta1", line, tg.getVerbs(), tg.getEntities(), tg.getAdjectives());
+//    	String [] c= {"bajarse_en_estación_el_restrepo"};
+//    	instance.calificarCamino(c, 4);
     	//instance. addStep("paso_5", null, "ir_al_local_Pepito");
 //    	
 //    	instance.agregarUsuario("us1", "Usuario1");
