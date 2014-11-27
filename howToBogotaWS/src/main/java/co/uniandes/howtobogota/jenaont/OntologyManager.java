@@ -695,6 +695,58 @@ public class OntologyManager {
 		TDB.sync(dataset);
 	}
 	
+	
+	public boolean esValido(String verbo, String calificativo){
+		
+		dataset.begin(ReadWrite.WRITE);
+		ontModel= getOntModel();
+		
+		boolean resp=true;
+		Individual iVerbo=getObject(verbo);
+		Individual iCalif=getObject(calificativo);
+		OntProperty  pVerboComp= ontModel.getOntProperty( URI +HowToBogotaProperty.VERBO_COMP_POR.getName());
+		if(iVerbo!=null && iCalif!=null){
+			
+			resp=iVerbo.hasProperty(pVerboComp, iCalif);
+	
+			if (!resp) {
+				
+		        String queryString = 
+		        		"PREFIX uri:<"+URI +">"+
+		        		"SELECT ?x " +
+		        		"WHERE {" +
+		        		"      ?x uri:"+HowToBogotaProperty.VERBO_COMP_POR.getName()+" uri:"+calificativo+" ." +
+		        		"{"+
+		        		"      ?x uri:"+HowToBogotaProperty.VERBO_SINON.getName()+"  uri:"+verbo+" . " + 
+		        		"}UNION{"+
+		        		"      uri:"+verbo+" uri:"+HowToBogotaProperty.VERBO_SINON.getName()+" ?x  . " + 
+		        		"}"+
+		        		"} ";
+		        
+		        Query query = QueryFactory.create(queryString);
+		
+		    	QueryExecution qe = QueryExecutionFactory.create(query, ontModel);
+		    	ResultSet results = qe.execSelect();
+		    	if(results.hasNext()){
+		    		resp=true;
+		    	}
+			}					
+
+		}else{
+			//Crearlos
+			if(iVerbo==null){
+				iVerbo =createObject(HowToBogotaClass.VERBOS, verbo);
+			}
+			if(iCalif==null){
+				iCalif =createObject(HowToBogotaClass.CALIFICATIVOS, calificativo);
+			}
+			
+			iVerbo.addProperty(pVerboComp, iCalif);
+		}
+		dataset.commit();
+		TDB.sync(dataset);
+		return resp;
+	}
 
 	
 }

@@ -44,6 +44,7 @@ public class Main {
         POSTaggerAnswer tg=new POSTaggerAnswer(line);
     	
     	OntologyManager instance = OntologyManager.darInstancia();
+    	System.out.println(instance.esValido("Comprar", "Cerca"));
     	//String prg=instance.buscarPreguntaSimilar(tg.getVerbs(), tg.getEntities(), tg.getAdjectives());
  
 //    	instance.agregarPregunta("pregunta1", line, tg.getVerbs(), tg.getEntities(), tg.getAdjectives());
@@ -76,7 +77,7 @@ public class Main {
     	d.begin(ReadWrite.READ);
     	OntModel m= instance.getOntModel();
     	String camNS = "http://www.semanticweb.org/ontologies/2014/8/howToBogota.owl#";
-    	Resource r = m.getResource( camNS + "Respuestas" );
+    	Resource r = m.getResource( camNS + "Verbos" );
         OntClass respuestas = r.as(OntClass.class);
         for (Iterator<? extends OntResource> i = respuestas.listInstances(true); i.hasNext(); ) {
         	OntResource o=i.next() ;
@@ -88,7 +89,7 @@ public class Main {
                 }
           }
         
-        r = m.getResource( camNS + "Preguntas" );
+        r = m.getResource( camNS + "Calificativos" );
         respuestas = r.as(OntClass.class);
         for (Iterator<? extends OntResource> i = respuestas.listInstances(true); i.hasNext(); ) {
         	OntResource o=i.next() ;

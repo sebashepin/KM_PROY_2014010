@@ -125,6 +125,7 @@
     <!-- http://www.semanticweb.org/ontologies/2014/8/howToBogota.owl#verbo_complementado_por -->
 
     <owl:ObjectProperty rdf:about="&howToBogota;verbo_complementado_por">
+        <rdf:type rdf:resource="&owl;TransitiveProperty"/>
         <rdfs:range rdf:resource="&howToBogota;Calificativos"/>
         <rdfs:domain rdf:resource="&howToBogota;Verbos"/>
     </owl:ObjectProperty>
@@ -301,6 +302,15 @@
     
 
 
+    <!-- http://www.semanticweb.org/ontologies/2014/8/howToBogota.owl#Caro -->
+
+    <owl:Thing rdf:about="&howToBogota;Caro">
+        <rdf:type rdf:resource="&howToBogota;Calificativos"/>
+        <rdf:type rdf:resource="&owl;NamedIndividual"/>
+    </owl:Thing>
+    
+
+
     <!-- http://www.semanticweb.org/ontologies/2014/8/howToBogota.owl#Como_comprar_zapatos_baratos? -->
 
     <owl:NamedIndividual rdf:about="&howToBogota;Como_comprar_zapatos_baratos?">
@@ -318,7 +328,18 @@
     <owl:Thing rdf:about="&howToBogota;Comprar">
         <rdf:type rdf:resource="&howToBogota;Verbos"/>
         <rdf:type rdf:resource="&owl;NamedIndividual"/>
+        <verbo_complementado_por rdf:resource="&howToBogota;Barato"/>
+        <verbo_complementado_por rdf:resource="&howToBogota;Caro"/>
     </owl:Thing>
+    
+
+
+    <!-- http://www.semanticweb.org/ontologies/2014/8/howToBogota.owl#Conocer -->
+
+    <owl:NamedIndividual rdf:about="&howToBogota;Conocer">
+        <rdf:type rdf:resource="&howToBogota;Verbos"/>
+        <verbo_complementado_por rdf:resource="&howToBogota;Pronto"/>
+    </owl:NamedIndividual>
     
 
 
@@ -330,6 +351,23 @@
         <textoNombre rdf:datatype="&rdfs;Literal">Daniel Salmanca</textoNombre>
         <tener rdf:resource="&howToBogota;Como_comprar_zapatos_baratos?"/>
     </owl:Thing>
+    
+
+
+    <!-- http://www.semanticweb.org/ontologies/2014/8/howToBogota.owl#Pronto -->
+
+    <owl:NamedIndividual rdf:about="&howToBogota;Pronto">
+        <rdf:type rdf:resource="&howToBogota;Calificativos"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/ontologies/2014/8/howToBogota.owl#Reservar -->
+
+    <owl:NamedIndividual rdf:about="&howToBogota;Reservar">
+        <rdf:type rdf:resource="&howToBogota;Verbos"/>
+        <verbo_sinonimo_de rdf:resource="&howToBogota;Comprar"/>
+    </owl:NamedIndividual>
     
 
 
