@@ -95,11 +95,11 @@ public class HowToBogotaEngine implements KnowledgeEngine{
 	public String addFirstStep(String question, String stepDescription) {
 		POSTaggerAnswer tg=new POSTaggerAnswer(question);
 		OntologyManager instance = OntologyManager.darInstancia();
-		String idQuestion=instance.buscarPreguntaExacta(tg.getVerbs(), tg.getEntities(), tg.getAdjectives());
+		String idQuestion=instance.buscarPreguntaSimilar(tg.getVerbs(), tg.getEntities(), tg.getAdjectives());
 		if(idQuestion!=null){
-			return "";
-		}else{
 			return instance.agregarPrimerPaso(idQuestion, stepDescription);
+		}else{
+			return "";
 		}
 		
 	}

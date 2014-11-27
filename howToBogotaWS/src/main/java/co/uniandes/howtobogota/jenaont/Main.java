@@ -49,9 +49,10 @@ public class Main {
         POSTaggerAnswer tg=new POSTaggerAnswer(line);
     	
     	OntologyManager instance = OntologyManager.darInstancia();
-    	long n= System.currentTimeMillis();
-        System.out.println(getStepNeighbor("paso_5", 	STEP_NEIGHBOR.NEXT));
-        System.out.println(System.currentTimeMillis()-n);
+//    	long n= System.currentTimeMillis();
+//    	String[] steps= {"Ir a la panaderia X", "Oler el pan, si huele bien será una buena seña", "Comprar"};
+//        System.out.println(createAndAnswerQuestion("Where can I buy delicious bread?", steps));
+//        System.out.println(System.currentTimeMillis()-n);
         
     	//String prg=instance.buscarPreguntaSimilar(tg.getVerbs(), tg.getEntities(), tg.getAdjectives());
  
@@ -97,7 +98,7 @@ public class Main {
                 }
           }
         
-        r = m.getResource( camNS + "Calificativos" );
+        r = m.getResource( camNS + "Preguntas" );
         respuestas = r.as(OntClass.class);
         for (Iterator<? extends OntResource> i = respuestas.listInstances(true); i.hasNext(); ) {
         	OntResource o=i.next() ;
@@ -241,37 +242,7 @@ public class Main {
        
         
        
-    }	public static AnswerResponse getStepNeighbor(String stepId,
-			STEP_NEIGHBOR stepDirection) {
-		AnswerResponse result;
-		OntologyManager instance = OntologyManager.darInstancia();
-		Step step=null;
-		 switch (stepDirection) {
-		 case UP: 
-			 step=instance.getUpDownStepNeighbor(stepId, true);
-			 break;
-		 case DOWN:
-			 step=instance.getUpDownStepNeighbor(stepId, false);
-			 break;
-		 case NEXT:
-			 step=instance.getNextStepNeighbor(stepId);
-			 break;
-		 case PREVIOUS:
-			 step=instance.getPrevStepNeighbor(stepId);
-			 break;
-		 }
-	      if (step == null) {
-	        result = new AnswerResponse(STATUS.NEW, null);
-	      } else {
-	        result =
-	            new AnswerResponse(STATUS.OK, new Answer(step.getStepId(), step.getStepDescription(),
-	                step.getNeighborhoodString()));
-	        System.out.println(step.getStepId()+ " -"+ step.getStepDescription()+ "-"+
-	                step.getNeighborhoodString());
-	      }
-		return result;
-	}
-
+    }	
     
     /**
     public static void describeClass(OntModel m){
