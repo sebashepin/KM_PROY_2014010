@@ -22,8 +22,10 @@ public class HowToBogotaEngine implements KnowledgeEngine{
 			}
 			if(isValid){
 				result = new AnswerResponse(STATUS.NEW, null);
+				System.out.println("new");
 			}else{
 				result = new AnswerResponse(STATUS.INVALID, null);
+				System.out.println("invalid");
 			}
 		}
 		else{
@@ -31,8 +33,10 @@ public class HowToBogotaEngine implements KnowledgeEngine{
 			if(step!=null){
 			 result = new AnswerResponse(STATUS.OK, new Answer(step.getStepId(), step.getStepDescription(),
 			              step.getNeighborhoodString()));
+			 System.out.println("ok");
 			}else{
 				result = new AnswerResponse(STATUS.NEW, null);
+				System.out.println("new");
 			}
 		}
 		

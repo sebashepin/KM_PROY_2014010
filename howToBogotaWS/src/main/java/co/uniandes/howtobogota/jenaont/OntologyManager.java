@@ -28,7 +28,7 @@ import com.hp.hpl.jena.tdb.TDBFactory;
 public class OntologyManager {
 
 	//Archivo en el cual se encuentra la ontolog�a
-	public static final String ONTOLOGY_DATA_FILE = "file:models/howToBogota.owl";
+	public static final String ONTOLOGY_DATA_FILE = "file:C:/models/howToBogota.owl";
 	
 	//URI de la ontolog�a
 	public static final String URI="http://www.semanticweb.org/ontologies/2014/8/howToBogota.owl#";
@@ -56,8 +56,9 @@ public class OntologyManager {
 
 		//Revisar si la carpeta "dataset" existe, de lo contrario, se crea la ontolog�a a partir del owl.
 		
-		File file = new File("database/");
-
+		File file = new File("C:/models/database/");
+		String path="file:"+System.getProperty("jboss.server.base.dir")+"/HowToBogota.war/models/howToBogota.owl";
+		
 		if(!file.exists() ||  !(file.list().length>0)){
 			//Se crea un modelo con el lenguaje OWLFull (caracter�stica de la ontolog�a), con un modelo de storage in memory
 	        //y con un RBS con reglas OWL (Sea lo que sea lo que eso signifique)
