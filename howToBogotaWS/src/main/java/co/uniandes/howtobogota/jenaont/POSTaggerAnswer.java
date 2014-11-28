@@ -131,7 +131,7 @@ static {
 private void tagData()
     throws ClassNotFoundException, IOException {
     
-	String text="C:/models/pos-en-general-brown.HiddenMarkovModel";
+	String text="/home/sebastian/models/pos-en-general-brown.HiddenMarkovModel";
     System.out.println("Reading model from file="+text);
     FileInputStream fileIn = new FileInputStream(text);
     ObjectInputStream objIn = new ObjectInputStream(fileIn);
