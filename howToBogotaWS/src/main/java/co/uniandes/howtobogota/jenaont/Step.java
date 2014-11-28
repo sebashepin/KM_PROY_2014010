@@ -80,7 +80,6 @@ public class Step {
 	        neighbors[3] = '1';
 
 	      return "" + String.valueOf(neighbors);
-	    
 	    }
 
 	    public String getStepByDirection(STEP_NEIGHBOR stepDirection) {
