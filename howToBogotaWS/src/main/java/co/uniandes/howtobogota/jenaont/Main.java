@@ -45,13 +45,15 @@ public class Main {
 
     public static void main( String[] args ) {
 
-        String line = "Where can I buy cheap shoes";
+        String line = "Where can I purchase inexpensive shoes";
         POSTaggerAnswer tg=new POSTaggerAnswer(line);
-    	
+        getAnswerToQuestion(line);
     	OntologyManager instance = OntologyManager.darInstancia();
+    	//instance.agregarSinonimoVerbos("bui", "purchas");
+
 //    	long n= System.currentTimeMillis();
-//    	String[] steps= {"Ir a la panaderia X", "Oler el pan, si huele bien será una buena seña", "Comprar"};
-//        System.out.println(createAndAnswerQuestion("Where can I buy delicious bread?", steps));
+    	//String[] steps= {"Ir al lugar X", "Ir al lugar Y", "Ir al lugar Z, Comprar"};
+       // System.out.println(createAndAnswerQuestion(line, steps));
 //        System.out.println(System.currentTimeMillis()-n);
         
     	//String prg=instance.buscarPreguntaSimilar(tg.getVerbs(), tg.getEntities(), tg.getAdjectives());
@@ -83,8 +85,9 @@ public class Main {
     	instance.darRespuesta("pregunta1");
     	
     	Dataset d=instance.getDataset();
-    	d.begin(ReadWrite.READ);
+    	d.begin(ReadWrite.WRITE);
     	OntModel m= instance.getOntModel();
+    	
     	String camNS = "http://www.semanticweb.org/ontologies/2014/8/howToBogota.owl#";
     	Resource r = m.getResource( camNS + "Verbos" );
         OntClass respuestas = r.as(OntClass.class);
@@ -244,6 +247,71 @@ public class Main {
        
     }	
     
+
+	public static boolean createAndAnswerQuestion(String question, Object[] steps) {
+		
+		POSTaggerAnswer tg=new POSTaggerAnswer(question);
+		OntologyManager instance = OntologyManager.darInstancia();
+
+		String idQuestion=instance.buscarPreguntaSimilar(tg.getVerbs(), tg.getEntities(), tg.getAdjectives());
+
+		if(idQuestion!=null){
+			return false;
+		}else{
+			String questionId=instance.agregarPregunta(question, tg.getVerbs(), tg.getEntities(), tg.getAdjectives());
+			instance.agregarRespuesta(questionId, (String [])steps);
+			return true;
+		}
+	}
+	
+    public static AnswerResponse getAnswerToQuestion(String question) {
+		AnswerResponse result;
+		OntologyManager instance = OntologyManager.darInstancia();
+		POSTaggerAnswer tg=new POSTaggerAnswer(question);
+		String idQuestion=instance.buscarPreguntaSimilar(tg.getVerbs(), tg.getEntities(), tg.getAdjectives());
+		if(idQuestion==null){
+			boolean isValid=true;
+			for(int i=0; i< tg.getVerbs().size() && isValid; i++){
+				for(int j=0;j<tg.getAdjectives().size() && isValid;j++){
+					isValid= (isValid && instance.esValido(tg.getVerbs().get(i), tg.getAdjectives().get(j))); 
+				}
+			}
+			if(isValid){
+				result = new AnswerResponse(STATUS.NEW, null);
+				System.out.println("new");
+			}else{
+				result = new AnswerResponse(STATUS.INVALID, null);
+				System.out.println("invalid");
+			}
+		}
+		else{
+			System.out.println(idQuestion);
+			Step step= instance.darRespuesta(idQuestion);
+			if(step!=null){
+			 result = new AnswerResponse(STATUS.OK, new Answer(step.getStepId(), step.getStepDescription(),
+			              step.getNeighborhoodString()));
+			 System.out.println("ok");
+			}else{
+				result = new AnswerResponse(STATUS.NEW, null);
+				System.out.println("new sin paso ");
+			}
+		}
+		
+		return result;
+	}
+    
+	public static String addFirstStep(String question, String stepDescription) {
+		POSTaggerAnswer tg=new POSTaggerAnswer(question);
+		OntologyManager instance = OntologyManager.darInstancia();
+		String idQuestion=instance.buscarPreguntaSimilar(tg.getVerbs(), tg.getEntities(), tg.getAdjectives());
+		if(idQuestion!=null){
+			return instance.agregarPrimerPaso(idQuestion, stepDescription);
+		}else{
+			return "";
+		}
+		
+	}
+
     /**
     public static void describeClass(OntModel m){
         //Utilidad para determinar qué se está leyendo
