@@ -894,5 +894,19 @@ public class OntologyManager {
 		return resp;
 	}
 
-	
+	public void agregarSinonimoVerbos(String verbo1, String verbo2){
+		
+		dataset.begin(ReadWrite.WRITE);
+		ontModel= getOntModel();
+		
+		boolean resp=true;
+		Individual iVerbo1=getObject(verbo1);
+		Individual iVerbo2=getObject(verbo2);
+		OntProperty  pVerboSino= ontModel.getOntProperty( URI +HowToBogotaProperty.VERBO_SINON.getName());
+		
+		iVerbo1.addProperty(pVerboSino, iVerbo2);
+		iVerbo2.addProperty(pVerboSino, iVerbo1);
+		dataset.commit();
+		TDB.sync(dataset);
+	}
 }
