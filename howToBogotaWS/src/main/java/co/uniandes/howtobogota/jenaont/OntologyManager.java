@@ -28,7 +28,7 @@ import com.hp.hpl.jena.tdb.TDBFactory;
 public class OntologyManager {
 
 	//Archivo en el cual se encuentra la ontologï¿½a
-	public static final String ONTOLOGY_DATA_FILE = "file:C:/models/howToBogota.owl";
+	public static final String ONTOLOGY_DATA_FILE = "file:/home/sebastian/models/howToBogota.owl";
 	
 	//URI de la ontologï¿½a
 	public static final String URI="http://www.semanticweb.org/ontologies/2014/8/howToBogota.owl#";
@@ -56,7 +56,7 @@ public class OntologyManager {
 
 		//Revisar si la carpeta "dataset" existe, de lo contrario, se crea la ontologï¿½a a partir del owl.
 		
-		File file = new File("C:/models/database/");
+		File file = new File("/home/sebastian/database/");
 		String path="file:"+System.getProperty("jboss.server.base.dir")+"/HowToBogota.war/models/howToBogota.owl";
 		
 		if(!file.exists() ||  !(file.list().length>0)){
@@ -289,7 +289,7 @@ public class OntologyManager {
 		    	}
 	    	}
     	}else{
-    		//Ningún paso tiene calificación
+    		//Ningï¿½n paso tiene calificaciï¿½n
     		//Entrega un paso aleatorio 
     		queryString = 
             		"PREFIX uri:<"+URI +">"+
@@ -510,7 +510,7 @@ public class OntologyManager {
 	    	}
 	    	
     	}else{
-    		//Ningún paso tiene calificación
+    		//Ningï¿½n paso tiene calificaciï¿½n
     		queryString = 
             		"PREFIX uri:<"+URI +">"+
             		"SELECT ?x ?next ?descrip " +
@@ -623,7 +623,7 @@ public class OntologyManager {
 	    		
 	    	}
     	}if(!gotIn || idStep==null){
-    		//Ningún paso tiene calificación
+    		//Ningï¿½n paso tiene calificaciï¿½n
     		//Entrega un paso aleatorio 
     		queryString = 
             		"PREFIX uri:<"+URI +">"+
@@ -688,7 +688,7 @@ public class OntologyManager {
 		
 		
 		//TODO: Tener en cuenta que puede tener muchos predecesores el predecesor. 
-		//Por ahora se escoge el predecesor con mayor calificación
+		//Por ahora se escoge el predecesor con mayor calificaciï¿½n
         String queryString = 
         		"PREFIX uri:<"+URI +">"+
         		"SELECT ?x ?descrip " +
