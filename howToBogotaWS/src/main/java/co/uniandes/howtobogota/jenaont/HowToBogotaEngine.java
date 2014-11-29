@@ -1,13 +1,5 @@
 package co.uniandes.howtobogota.jenaont;
 
-import java.util.Iterator;
-
-import com.hp.hpl.jena.ontology.OntClass;
-import com.hp.hpl.jena.ontology.OntModel;
-import com.hp.hpl.jena.ontology.OntResource;
-import com.hp.hpl.jena.rdf.model.Resource;
-import com.hp.hpl.jena.rdf.model.Statement;
-
 import co.uniandes.howtobogota.engine.Answer;
 import co.uniandes.howtobogota.engine.AnswerResponse;
 import co.uniandes.howtobogota.engine.KnowledgeEngine;
@@ -42,7 +34,8 @@ public class HowToBogotaEngine implements KnowledgeEngine{
 			if(step!=null){
 			 result = new AnswerResponse(STATUS.OK, new Answer(step.getStepId(), step.getStepDescription(),
 			              step.getNeighborhoodString()));
-			 System.out.println("ok");
+			 result.setQuestion(question);
+			 System.out.println("ok");	
 			}else{
 				result = new AnswerResponse(STATUS.NEW, null);
 				System.out.println("new sin paso");

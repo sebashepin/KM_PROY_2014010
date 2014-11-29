@@ -57,7 +57,6 @@ public class OntologyManager {
 		//Revisar si la carpeta "dataset" existe, de lo contrario, se crea la ontolog�a a partir del owl.
 		
 		File file = new File("C:/models/database/");
-		String path="file:"+System.getProperty("jboss.server.base.dir")+"/HowToBogota.war/models/howToBogota.owl";
 		
 		if(!file.exists() ||  !(file.list().length>0)){
 			//Se crea un modelo con el lenguaje OWLFull (caracter�stica de la ontolog�a), con un modelo de storage in memory
@@ -374,8 +373,8 @@ public class OntologyManager {
      	queryString=queryString+
      		"		uri:"+calificativos.get(i)+"	uri:"+HowToBogotaProperty.CALIFICATIVO_ASOC.getName()+"	?x . ";
          queryString+="} UNION{";
-         queryString+="		?v	uri:"+HowToBogotaProperty.CALIFICATIVO_ASOC.getName()+"	?x . ";
-         queryString+="		uri:"+calificativos.get(i)+"	uri:"+HowToBogotaProperty.CALIFICATIVO_SINON.getName()+"	?v. ";
+         queryString+="		?c	uri:"+HowToBogotaProperty.CALIFICATIVO_ASOC.getName()+"	?x . ";
+         queryString+="		uri:"+calificativos.get(i)+"	uri:"+HowToBogotaProperty.CALIFICATIVO_SINON.getName()+"	?c. ";
          queryString=queryString+
          		"      }";
         }
@@ -391,7 +390,6 @@ public class OntologyManager {
     	while(results.hasNext()){
     		QuerySolution qr= results.next();
     		res=qr.get("x").asResource().getLocalName();
-    		System.out.println(res);
     	}
 		dataset.commit();
 		TDB.sync(dataset);
@@ -597,6 +595,7 @@ public class OntologyManager {
     		gotIn=true;
     		QuerySolution qr= results.next();
     		String rtaId=qr.getResource("x").getLocalName();
+    		System.out.println(rtaId);
     		if(rtaId.equals(stepId)){
     			break;
     		}else{
@@ -609,6 +608,7 @@ public class OntologyManager {
     		i++;
     	}
     	if(gotIn){
+    		System.out.println("It got in 1");
     		if(idStep!=null){
 	    		s= new Step(idStep, stepDesc);
 	    		s.setPreviousStep(stepId);
@@ -649,6 +649,7 @@ public class OntologyManager {
         		gotIn=true;
         		QuerySolution qr= results.next();
         		String rtaId=qr.getResource("x").getLocalName();
+        		System.out.println("2-"+rtaId);
         		if(!rtaId.equals(stepId)){
         			idStep=rtaId;
         			stepDesc=qr.getLiteral("descrip").getString();
@@ -661,6 +662,7 @@ public class OntologyManager {
         	
         	if(gotIn){
         		if(idStep!=null){
+        			
     	    		s= new Step(idStep, stepDesc);
     	    		s.setPreviousStep(stepId);
     	    		s.setNextStep(idNext);
@@ -903,23 +905,15 @@ public class OntologyManager {
 		
 		dataset.begin(ReadWrite.WRITE);
 		ontModel= getOntModel();
-		
-		boolean resp=true;
+
 		Individual iVerbo1=getObject(verbo1);
 		Individual iVerbo2=getObject(verbo2);
-		OntProperty  pVerboSino= ontModel.getOntProperty( URI +HowToBogotaProperty.VERBO_SINON.getName());
-	     Individual p =getObject("pregunta2");
-	     Individual paso= getObject("paso9");
-	     if(p==null){
-	    	 System.out.println("Preguntas");
-	     }
-	     if(paso==null){
-	    	 System.out.println("Pasos");
-	     }
-	     OntProperty  pPasAsociado= ontModel.getOntProperty( URI +HowToBogotaProperty.PREGUNTA_ASOC_RTA.getName());
-	     p.addProperty(pPasAsociado, paso);
+		OntProperty  pVerboSino= ontModel.getOntProperty( URI +HowToBogotaProperty.CALIFICATIVO_SINON.getName());
+
 		iVerbo1.addProperty(pVerboSino, iVerbo2);
 		iVerbo2.addProperty(pVerboSino, iVerbo1);
+
+
 		dataset.commit();
 		TDB.sync(dataset);
 	}
