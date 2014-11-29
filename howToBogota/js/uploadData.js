@@ -1,9 +1,10 @@
 $(document).ready(function(){
     $('#preguntar #askQuestionForm').submit(function(){  
-	$( "body" ).load( "respuesta.html" );
+	
+		$('#preguntar .printResults').html("<b>Enviando...</b>");
 		//$.post('postReceiver.php', $(this).serialize(), function(data){
-       $('#preguntar .printResults').html("<b>Enviando...</b>");
        $.post('rest/GetAnswer', $(this).serialize(), function(data){
+		   		$( "body" ).load( "respuesta.html" );
             $('#preguntar .printResults').html(data);             
         }).fail(function() {
 			 alert( "Envío fallido." );      
