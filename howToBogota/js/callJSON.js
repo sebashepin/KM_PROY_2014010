@@ -58,7 +58,8 @@ var crearBotones = function(setBotones){
 		});
 	}
 	if(setBotones==2){
-		$.getJSON('rest/GetStep?step_id=2&step_direction=0100', function(respuesta) {		
+		//$.getJSON('rest/GetStep?step_id=2&step_direction=0100', function(respuesta) {
+		$.getJSON('rest/answer', function(respuesta) {		
 			if(respuesta.step.steps_neighborhood.charAt(0) == "1" ){ 
 				$('.swiper-slide').append('<a href"#" class="arriba"></a>');	
 			}
@@ -99,6 +100,7 @@ var llamarSiguientePaso= function(pasoActual){
 	var velocidad = 500;
 	if(pasoActual==1){
 		$.getJSON('rest/GetStep?step_id=2&step_direction=0100', function(respuesta) {
+		$.getJSON('rest/answer', function(respuesta) {
 			$('.arriba').click(function(){		
 
 
