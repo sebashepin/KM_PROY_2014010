@@ -49,7 +49,7 @@ public class Main {
         POSTaggerAnswer tg=new POSTaggerAnswer(line);
         getAnswerToQuestion(line);
     	OntologyManager instance = OntologyManager.darInstancia();
-    	//instance.agregarSinonimoVerbos("bui", "purchas");
+    	instance.agregarSinonimoVerbos("bui", "purchas");
 
 //    	long n= System.currentTimeMillis();
     	//String[] steps= {"Ir al lugar X", "Ir al lugar Y", "Ir al lugar Z, Comprar"};
