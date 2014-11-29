@@ -1,6 +1,7 @@
 $(document).ready(function() { 
 			//$.getJSON('js/answer3.json', function(respuesta) {
-    		$.getJSON('rest/answer', function(respuesta) {
+			 $info = $(this).data("info");
+    		$.getJSON($info , function(respuesta) {
              	$('#respuesta .contenedor #contenidoPrincipal').html('<div id="lapregunta"><p class="morados">You wrote</p><p id="howto">How To....</p><p id="questionASked">'+ respuesta.question + '</p></div>');
              	if(respuesta.status == "OK"){
              		$('#respuesta .contenedor #contenidoPrincipal').append('<div id="lasrespuestas"><div class="swiper-container"><div class="swiper-wrapper"><div class="swiper-slide">');
@@ -24,7 +25,7 @@ $(document).ready(function() {
 var crearBotones = function(setBotones){
 	if(setBotones==1){
 		//$.getJSON('js/answer3.json', function(respuesta) {	
-		$.getJSON('rest/answer', function(respuesta) {		
+		$.getJSON('rest/GetAnswer', function(respuesta) {		
 			if(respuesta.step.steps_neighborhood.charAt(0) == "1" ){ 
 				$('.swiper-slide').append('<a href"#" class="arriba"></a>');	
 			}
@@ -52,7 +53,7 @@ var crearBotones = function(setBotones){
 	if(setBotones==2){
 		//$.getJSON('rest/GetStep?step_id=2&step_direction=0100', function(respuesta) {
 		//$.getJSON('js/nextStep.json', function(respuesta) {		
-		$.getJSON('rest/answer', function(respuesta) {		
+		$.getJSON('rest/GetAnswer', function(respuesta) {		
 			if(respuesta.step.steps_neighborhood.charAt(0) == "1" ){ 
 				$('.swiper-slide').append('<a href"#" class="arriba"></a>');	
 			}
@@ -94,7 +95,7 @@ var llamarSiguientePaso= function(pasoActual){
 	if(pasoActual==1){
 		//$.getJSON('js/nextStep.json', function(respuesta) {
 		//$.getJSON('rest/GetStep?step_id=2&step_direction=0100', function(respuesta) {
-		$.getJSON('rest/answer', function(respuesta) {
+		$.getJSON('rest/GetAnswer', function(respuesta) {
 			$('.arriba').click(function(){		
 
 
@@ -154,7 +155,7 @@ var llamarSiguientePaso= function(pasoActual){
 
 if(pasoActual==2){
 	//$.getJSON('js/answer3.json', function(respuesta) {
-	$.getJSON('rest/answer', function(respuesta) {
+	$.getJSON('rest/GetAnswer', function(respuesta) {
 		$('.arriba').click(function(){		
 
 

@@ -10,7 +10,7 @@ $(document).ready(function(){
 			$('#respuesta').append('<div id="lasrespuestas"><div class="swiper-container"><div class="swiper-wrapper"><div class="swiper-slide">');
 			$('.swiper-slide').append('<p class="paso"><span class="textoPAso">STEP</span> <span class="numeroPaso">' + respuesta.step.step_id+ '</span></p>');
 			$('.swiper-slide').append('<p class="stepAnswer"> Description: ' + respuesta.step.step_description+ ' y mis vecinos son ' + respuesta.step.steps_neighborhood + '</p>');
-			crearBotones(1);
+			crearBotones(1, respuesta);
 			$('.contenedor').append('</div></div></div></div>');
 
 		}
@@ -28,10 +28,11 @@ $(document).ready(function(){
         return false; 
     });
 
-var crearBotones = function(setBotones){
+var crearBotones = function(setBotones, respuesta){
 	if(setBotones==1){
-		$.getJSON('js/answer3.json', function(respuesta) {	
+		//$.getJSON('js/answer3.json', function(respuesta) {	
 		//$.getJSON('rest/answer', function(respuesta) {		
+		console.log(respuesta.step.steps_neighborhood);
 			if(respuesta.step.steps_neighborhood.charAt(0) == "1" ){ 
 				$('.swiper-slide').append('<a href"#" class="arriba"></a>');	
 			}
@@ -52,13 +53,13 @@ var crearBotones = function(setBotones){
 				crearRating();
 
 			}
-			llamarSiguientePaso(1);
+			llamarSiguientePaso(1, respuesta.step.step_id);
 
-		});
+		//});
 	}
 	if(setBotones==2){
-		//$.getJSON('rest/GetStep?step_id=2&step_direction=0100', function(respuesta) {
-		$.getJSON('js/nextStep.json', function(respuesta) {		
+	//	$.getJSON('rest/GetStep?step_id=2&step_direction=0100', function(respuesta) {
+		//$.getJSON('js/nextStep.json', function(respuesta) {		
 		//$.getJSON('rest/answer', function(respuesta) {		
 			if(respuesta.step.steps_neighborhood.charAt(0) == "1" ){ 
 				$('.swiper-slide').append('<a href"#" class="arriba"></a>');	
@@ -80,145 +81,153 @@ var crearBotones = function(setBotones){
 				crearRating();
 
 			}
-			llamarSiguientePaso(2);
+			llamarSiguientePaso(2, respuesta.step.step_id);
 
-		});
+		//});
 		
 	}
 
 }
 
-var llamarSiguientePaso= function(pasoActual){
+var llamarSiguientePaso= function(pasoActual, stepId){
 	var botones = ['.arriba','.derecha','.abajo','.izquierda'];
 	var direccion = [
 	{bottom:'-300px',opacity:'0'},
 	{left:'-300px',opacity:'0'},
 	{top:'-300px',opacity:'0'},
 	{right:'-300px',opacity:'0'}];
+	
+	console.log(stepId);
 
 	var velocidad = 500;
 	if(pasoActual==1){
-		$.getJSON('js/nextStep.json', function(respuesta) {
+		
 		//$.getJSON('rest/GetStep?step_id=2&step_direction=0100', function(respuesta) {
 		//$.getJSON('rest/answer', function(respuesta) {
 			$('.arriba').click(function(){		
-
+				var rest='rest/GetStep?step_id='+stepId+'&step_direction=1000';
+				$.getJSON(rest, function(respuesta) {
 
 				$('.swiper-slide').animate({bottom:'-300px',opacity:'0'},(velocidad-200),function() { $('.swiper-slide').html('<p class="paso"><span class="textoPAso">STEP</span> <span class="numeroPaso">' + respuesta.step.step_id+ '</span></p>');
 					$('.swiper-slide').append('<p class="stepAnswer"> Description: ' + respuesta.step.step_description+ ' y mis vecinos son ' + respuesta.step.steps_neighborhood + '</p>');
 					$('.swiper-slide').animate({bottom:'100px'},0);
 					$('.swiper-slide').animate({bottom:'0px',opacity:'1'},velocidad);
-					crearBotones(2);    }   );
+					crearBotones(2, respuesta);    }   );
 				
-
+				});
 			});
 
 			$('.derecha').click(function(){		
-
-
+				var rest='rest/GetStep?step_id='+stepId+'&step_direction=1100';
+				$.getJSON(rest, function(respuesta) {
 				$('.swiper-slide').animate({left:'-300px',opacity:'0'},(velocidad-200),function() {
 					$('.swiper-slide').html('<p class="paso"><span class="textoPAso">STEP</span> <span class="numeroPaso">' + respuesta.step.step_id+ '</span></p>');
 					$('.swiper-slide').append('<p class="stepAnswer"> Description: ' + respuesta.step.step_description+ ' y mis vecinos son ' + respuesta.step.steps_neighborhood + '</p>');					
 					$('.swiper-slide').animate({left:'100px'},0);
 					$('.swiper-slide').animate({left:'0px',opacity:'1'},velocidad);
-					crearBotones(2);
+					crearBotones(2, respuesta);
 				});
-
+});
 
 			});
 			$('.abajo').click(function(){		
-
+				var rest='rest/GetStep?step_id='+stepId+'&step_direction=0010';
+				$.getJSON(rest, function(respuesta) {
 
 				$('.swiper-slide').animate({bottom:'300px',opacity:'0'},(velocidad-200),function() {
 					$('.swiper-slide').html('<p class="paso"><span class="textoPAso">STEP</span> <span class="numeroPaso">' + respuesta.step.step_id+ '</span></p>');
 					$('.swiper-slide').append('<p class="stepAnswer"> Description: ' + respuesta.step.step_description+ ' y mis vecinos son ' + respuesta.step.steps_neighborhood + '</p>');
 					$('.swiper-slide').animate({bottom:'-100px'},0);
 					$('.swiper-slide').animate({bottom:'0px',opacity:'1'},velocidad);
-					crearBotones(2);
+					crearBotones(2, respuesta);
 
 
 				});
 				
-
+});
 			});
 			$('.izquierda').click(function(){		
-
+				var rest='rest/GetStep?step_id='+stepId+'&step_direction=0001';
+				$.getJSON(rest, function(respuesta) {
 				$('.swiper-slide').animate({left:'600px',opacity:'0'},(velocidad-200),function() {
 					$('.swiper-slide').html('<p class="paso"><span class="textoPAso">STEP</span> <span class="numeroPaso">' + respuesta.step.step_id+ '</span></p>');
 					$('.swiper-slide').append('<p class="stepAnswer"> Description: ' + respuesta.step.step_description+ ' y mis vecinos son ' + respuesta.step.steps_neighborhood + '</p>');
 					$('.swiper-slide').animate({left:'-100px'},0);
 					$('.swiper-slide').animate({left:'0px',opacity:'1'},velocidad);
-					crearBotones(2);
+					crearBotones(2, respuesta);
 
 				});
 				
-
+});
 			});
 
-		});
+		
 }
 
 if(pasoActual==2){
-	$.getJSON('js/answer3.json', function(respuesta) {
 	//$.getJSON('rest/answer', function(respuesta) {
 		$('.arriba').click(function(){		
-
+				var rest='rest/GetStep?step_id='+stepId+'&step_direction=1000';
+				$.getJSON(rest, function(respuesta) {
 
 			$('.swiper-slide').animate({bottom:'-300px',opacity:'0'},(velocidad-200),function() {
 				$('.swiper-slide').html('<p class="paso"><span class="textoPAso">STEP</span> <span class="numeroPaso">' + respuesta.step.step_id+ '</span></p>');
 			$('.swiper-slide').append('<p class="stepAnswer"> Description: ' + respuesta.step.step_description+ ' y mis vecinos son ' + respuesta.step.steps_neighborhood + '</p>');
 			$('.swiper-slide').animate({bottom:'100px'},0);
 			$('.swiper-slide').animate({bottom:'0px',opacity:'1'},velocidad);
-			crearBotones(1);
+			crearBotones(1, respuesta);
 
 			});
-			
+			});
 
 		});
 
 		$('.derecha').click(function(){		
-
+				var rest='rest/GetStep?step_id='+stepId+'&step_direction=1100';
+				$.getJSON(rest, function(respuesta) {
 
 			$('.swiper-slide').animate({left:'-300px',opacity:'0'},(velocidad-200),function() {
 				$('.swiper-slide').html('<p class="paso"><span class="textoPAso">STEP</span> <span class="numeroPaso">' + respuesta.step.step_id+ '</span></p>');
 			$('.swiper-slide').append('<p class="stepAnswer"> Description: ' + respuesta.step.step_description+ ' y mis vecinos son ' + respuesta.step.steps_neighborhood + '</p>');
 			$('.swiper-slide').animate({left:'100px'},0);
 			$('.swiper-slide').animate({left:'0px',opacity:'1'},velocidad);
-			crearBotones(1);
+			crearBotones(1, respuesta);
 
 			});
-			
+			});
 
 		});
 		$('.abajo').click(function(){		
 
-
+				var rest='rest/GetStep?step_id='+stepId+'&step_direction=0010';
+				$.getJSON(rest, function(respuesta) {
 			$('.swiper-slide').animate({bottom:'300px',opacity:'0'},(velocidad-200),function() {
 $('.swiper-slide').html('<p class="paso"><span class="textoPAso">STEP</span> <span class="numeroPaso">' + respuesta.step.step_id+ '</span></p>');
 			$('.swiper-slide').append('<p class="stepAnswer"> Description: ' + respuesta.step.step_description+ ' y mis vecinos son ' + respuesta.step.steps_neighborhood + '</p>');
 			$('.swiper-slide').animate({bottom:'-100px'},0);
 			$('.swiper-slide').animate({bottom:'0px',opacity:'1'},velocidad);
-			crearBotones(1);
+			crearBotones(1, respuesta);
 
 			});
-			
+			});
 
 		});
 		$('.izquierda').click(function(){		
-
+				var rest='rest/GetStep?step_id='+stepId+'&step_direction=0001';
+				$.getJSON(rest, function(respuesta) {
+				
 			$('.swiper-slide').animate({left:'600px',opacity:'0'},(velocidad-200),function() {
 $('.swiper-slide').html('<p class="paso"><span class="textoPAso">STEP</span> <span class="numeroPaso">' + respuesta.step.step_id+ '</span></p>');
 			$('.swiper-slide').append('<p class="stepAnswer"> Description: ' + respuesta.step.step_description+ ' y mis vecinos son ' + respuesta.step.steps_neighborhood + '</p>');
 			$('.swiper-slide').animate({left:'-100px'},0);
 			$('.swiper-slide').animate({left:'0px',opacity:'1'},velocidad);
-			crearBotones(1);
+			crearBotones(1, respuesta);
 				
 			});
 			
-
+});
 		});
 
-	});
 }
 
 }
