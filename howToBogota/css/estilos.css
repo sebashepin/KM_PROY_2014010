@@ -147,28 +147,28 @@ h1, h2, h3, h4, h5, h6 {
 	width:100%;
 }
 /******************Estilos Respuesta***************************/
-#respuesta #contenidoPrincipal { margin-top: 10%; }
-#respuesta #contenidoPrincipal .morados {
+.contenedor #respuesta { margin-top: 10%; }
+.contenedor #respuesta .morados {
 	color: #89889f;
 	font-size: 12pt;
 }
-#respuesta #contenidoPrincipal #howto {
+.contenedor #respuesta #howto {
 	color: #ba9bc7;
 	font-size: 16pt;
 	margin-bottom: 0px;
 }
-#respuesta #contenidoPrincipal #questionASked {
+.contenedor #respuesta #questionASked {
 	margin-top: 0px;
 	font-size: 16pt;
 }
-#respuesta #contenidoPrincipal #lapregunta {
+.contenedor #respuesta #lapregunta {
 	display: block;
 	clear: both;
 	float: left;
 	width: 100%;
 	margin-left: 25px;
 }
-#respuesta #contenidoPrincipal #lasrespuestas {
+.contenedor #respuesta #lasrespuestas {
 	display: block;
 	clear: both;
 	float: left;
@@ -446,21 +446,21 @@ div#pasosPregunta > div{
 	/******************Estilos Preguntar***************************/
 	#preguntar #contenidoPrincipal { margin-top: 20%; }
 	/******************Estilos la respeusta***************************/
-	#respuesta #contenidoPrincipal{
+	.contenedor #respuesta{
 		margin-top:5%;
 	}
-	#respuesta #contenidoPrincipal #lapregunta {
+	.contenedor #respuesta #lapregunta {
 		clear: none;
 		width: 48%;
 		margin-right:2%;
 		margin-left: 0;
 		text-align:right;
 	}
-	#respuesta #contenidoPrincipal #lapregunta .morados{
+	.contenedor #respuesta #lapregunta .morados{
 		padding:0px;
 		margin-top:0;
 	}
-	#respuesta #contenidoPrincipal #lasrespuestas {
+	.contenedor #respuesta #lasrespuestas {
 		clear: none;
 		width: 48%;
 		margin-left:2%;
