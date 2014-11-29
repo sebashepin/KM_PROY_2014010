@@ -10,7 +10,6 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Response;
 
-import co.uniandes.howtobogota.engine.Answer;
 import co.uniandes.howtobogota.engine.AnswerResponse;
 import co.uniandes.howtobogota.engine.KES;
 import co.uniandes.howtobogota.engine.KnowledgeEngine;
@@ -51,7 +50,7 @@ public class WSEndpoint {
   @Path("/GetStep")
   @Produces("application/json")
   public AnswerResponse getStep(@QueryParam("step_id") String stepId,
-      @QueryParam("step_direction") String stepDirectionString) {
+      @QueryParam("step_direction") String stepDirectionString) {		
     STEP_NEIGHBOR relativeDirection = null;
     int direction = Integer.parseInt(stepDirectionString);
 
@@ -62,7 +61,7 @@ public class WSEndpoint {
       case 0100:
         relativeDirection = STEP_NEIGHBOR.NEXT;
         break;
-      case 0010:
+      case 10:
         relativeDirection = STEP_NEIGHBOR.DOWN;
         break;
       case 0001:
