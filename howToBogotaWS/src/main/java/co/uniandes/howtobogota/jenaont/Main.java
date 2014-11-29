@@ -45,22 +45,15 @@ public class Main {
 
     public static void main( String[] args ) {
 
-        String line = "Where can I purchase inexpensive shoes";
+        String line = "purchase inexpensive shoes?";
         POSTaggerAnswer tg=new POSTaggerAnswer(line);
-        getAnswerToQuestion(line);
+       getAnswerToQuestion(line);
+       getStepNeighbor("paso4",
+   			STEP_NEIGHBOR.DOWN);
     	OntologyManager instance = OntologyManager.darInstancia();
-    	instance.agregarSinonimoVerbos("bui", "purchas");
 
-//    	long n= System.currentTimeMillis();
-    	//String[] steps= {"Ir al lugar X", "Ir al lugar Y", "Ir al lugar Z, Comprar"};
-       // System.out.println(createAndAnswerQuestion(line, steps));
-//        System.out.println(System.currentTimeMillis()-n);
-        
-    	//String prg=instance.buscarPreguntaSimilar(tg.getVerbs(), tg.getEntities(), tg.getAdjectives());
- 
-    	//instance.agregarPregunta("pregunta1", line, tg.getVerbs(), tg.getEntities(), tg.getAdjectives());
-//    	String [] c= {"bajarse_en_estación_el_restrepo"};
-//    	instance.calificarCamino(c, 4);
+    	String [] c= {"paso2","paso5","paso7","paso11","paso15"};
+    	instance.calificarCamino(c, 4);
     	//instance. addStep("paso_5", null, "ir_al_local_Pepito");
 //    	
 //    	instance.agregarUsuario("us1", "Usuario1");
@@ -89,7 +82,7 @@ public class Main {
     	OntModel m= instance.getOntModel();
     	
     	String camNS = "http://www.semanticweb.org/ontologies/2014/8/howToBogota.owl#";
-    	Resource r = m.getResource( camNS + "Verbos" );
+    	Resource r = m.getResource( camNS + "Calificativos" );
         OntClass respuestas = r.as(OntClass.class);
         for (Iterator<? extends OntResource> i = respuestas.listInstances(true); i.hasNext(); ) {
         	OntResource o=i.next() ;
@@ -273,6 +266,7 @@ public class Main {
 			boolean isValid=true;
 			for(int i=0; i< tg.getVerbs().size() && isValid; i++){
 				for(int j=0;j<tg.getAdjectives().size() && isValid;j++){
+					System.out.println(tg.getVerbs().get(i)+"-"+tg.getAdjectives().get(j));
 					isValid= (isValid && instance.esValido(tg.getVerbs().get(i), tg.getAdjectives().get(j))); 
 				}
 			}
@@ -291,6 +285,7 @@ public class Main {
 			 result = new AnswerResponse(STATUS.OK, new Answer(step.getStepId(), step.getStepDescription(),
 			              step.getNeighborhoodString()));
 			 System.out.println("ok");
+			 System.out.println(step.getNeighborhoodString());
 			}else{
 				result = new AnswerResponse(STATUS.NEW, null);
 				System.out.println("new sin paso ");
@@ -311,7 +306,41 @@ public class Main {
 		}
 		
 	}
+	
+	public static String addStep(String previousStepId, String nextStepId,
+			String stepDescription) {
+		OntologyManager instance = OntologyManager.darInstancia();
+		return instance.addStep(previousStepId, nextStepId, stepDescription);
+	}
 
+	public static AnswerResponse getStepNeighbor(String stepId,
+			STEP_NEIGHBOR stepDirection) {
+		AnswerResponse result;
+		OntologyManager instance = OntologyManager.darInstancia();
+		Step step=null;
+		 switch (stepDirection) {
+		 case UP: 
+			 step=instance.getUpDownStepNeighbor(stepId, true);
+			 break;
+		 case DOWN:
+			 step=instance.getUpDownStepNeighbor(stepId, false);
+			 break;
+		 case NEXT:
+			 step=instance.getNextStepNeighbor(stepId);
+			 break;
+		 case PREVIOUS:
+			 step=instance.getPrevStepNeighbor(stepId);
+			 break;
+		 }
+	      if (step == null) {
+	        result = new AnswerResponse(STATUS.NEW, null);
+	      } else {
+	        result =
+	            new AnswerResponse(STATUS.OK, new Answer(step.getStepId(), step.getStepDescription(),
+	                step.getNeighborhoodString()));
+	      }
+		return result;
+	}
     /**
     public static void describeClass(OntModel m){
         //Utilidad para determinar qué se está leyendo
