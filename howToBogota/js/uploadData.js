@@ -2,36 +2,26 @@ $(document).ready(function(){
     $('#preguntar #askQuestionForm').submit(function(){  
 	
 		$('#preguntar .printResults').html("<b>Enviando...</b>");
-		$.post('postReceiver.php', $(this).serialize(), function(data){
-       //$.post('rest/GetAnswer', $(this).serialize(), function(data){
-//aca empieza si serializa bien  
-		$.getJSON('js/answer3.json', function(respuesta) {
-    	//$.getJSON('rest/answer', function(respuesta) {
-             	$('.contenedor').html('<div id="respuesta"><div id="lapregunta"><p class="morados">You wrote</p><p id="howto">How To....</p><p id="questionASked">'+ respuesta.question + '</p></div>');
-             	if(respuesta.status == "OK"){
-             		$('#respuesta').append('<div id="lasrespuestas"><div class="swiper-container"><div class="swiper-wrapper"><div class="swiper-slide">');
-             		$('.swiper-slide').append('<p class="paso"><span class="textoPAso">STEP</span> <span class="numeroPaso">' + respuesta.step.step_id+ '</span></p>');
-             		$('.swiper-slide').append('<p class="stepAnswer"> Description: ' + respuesta.step.step_description+ ' y mis vecinos son ' + respuesta.step.steps_neighborhood + '</p>');
-             		crearBotones(1);
-             		$('.contenedor').append('</div></div></div></div>');
+		//$.post('postReceiver.php', $(this).serialize(), function(data){
+       $.post('rest/GetAnswer', $(this).serialize(), function(respuesta){
+	   console.log(respuesta);
+		$('.contenedor').html('<div id="respuesta"><div id="lapregunta"><p class="morados">You wrote</p><p id="howto">How To....</p><p id="questionASked">'+ respuesta.question + '</p></div>');
+		if(respuesta.status == "OK"){
+			$('#respuesta').append('<div id="lasrespuestas"><div class="swiper-container"><div class="swiper-wrapper"><div class="swiper-slide">');
+			$('.swiper-slide').append('<p class="paso"><span class="textoPAso">STEP</span> <span class="numeroPaso">' + respuesta.step.step_id+ '</span></p>');
+			$('.swiper-slide').append('<p class="stepAnswer"> Description: ' + respuesta.step.step_description+ ' y mis vecinos son ' + respuesta.step.steps_neighborhood + '</p>');
+			crearBotones(1);
+			$('.contenedor').append('</div></div></div></div>');
 
-             	}
-             	else if(respuesta.status == "NEW"){
-             		$('.contenedor').append('<div id="lasrespuestas"><p>There are not answers for this Question.</p>'+'<p>Would you like to answer it?</p>'+'<div id="botonera"><a  data-ajax="false" href="responderPregunta.html" class="botonPreguntaGrande alLado">YES</a> <a  data-ajax="false" href="index.html" class="botonPreguntaGrande alLado">NO</a></div></div> ');
-             	}
-             	else if(respuesta.status == "INVALID"){
-             		$('.contenedor').append('<div id="lasrespuestas"><p>Your question is invalid. Please go back and ask again</p>'+'<a  data-ajax="false" href="index.html" class="botonPreguntaGrande alLado">GO BACK</a></div>');				
-             	}
-
-
-             });
-
-
-            $('#preguntar .printResults').html(data);   
-			
-			
-			
-//aca termina si serializa bien          
+		}
+		else if(respuesta.status == "NEW"){
+			$('.contenedor').append('<div id="lasrespuestas"><p>There are not answers for this Question.</p>'+'<p>Would you like to answer it?</p>'+'<div id="botonera"><a  data-ajax="false" href="responderPregunta.html" class="botonPreguntaGrande alLado">YES</a> <a  data-ajax="false" href="index.html" class="botonPreguntaGrande alLado">NO</a></div></div> ');
+		}
+		else if(respuesta.status == "INVALID"){
+			$('.contenedor').append('<div id="lasrespuestas"><p>Your question is invalid. Please go back and ask again</p>'+'<a  data-ajax="false" href="index.html" class="botonPreguntaGrande alLado">GO BACK</a></div>');				
+		}
+            $('#preguntar .printResults').html(respuesta);   
+			   
         }).fail(function() {
 			 alert( "Envío fallido." );      
         });

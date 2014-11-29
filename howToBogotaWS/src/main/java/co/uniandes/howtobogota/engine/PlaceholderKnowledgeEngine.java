@@ -26,10 +26,12 @@ public class PlaceholderKnowledgeEngine implements KnowledgeEngine {
     Step step = stepsByQuestion.get(question);
     if (step == null)
       result = new AnswerResponse(STATUS.NEW, null);
-    else
+    else{
       result =
           new AnswerResponse(STATUS.OK, new Answer(step.stepId, step.stepDescription,
               step.getNeighborhoodString()));
+      result.setQuestion(question);
+    }
 
     return result;
   }

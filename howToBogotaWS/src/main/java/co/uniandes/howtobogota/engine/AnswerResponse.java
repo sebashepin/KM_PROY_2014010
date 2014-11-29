@@ -4,12 +4,14 @@ public class AnswerResponse {
 	
 	public enum STATUS { OK, NEW, INVALID};
 	
-	public STATUS status;
-	public Answer step;
+	private STATUS status;
+	private Answer step;
+	private String question;
 	public AnswerResponse(STATUS status, Answer step) {
 		super();
 		this.status = status;
 		this.step = step;
+		this.question="";
 	}
 	public STATUS getStatus() {
 		return status;
@@ -22,6 +24,12 @@ public class AnswerResponse {
 	}
 	public void setStep(Answer step) {
 		this.step = step;
+	}
+	public String getQuestion() {
+		return question;
+	}
+	public void setQuestion(String question) {
+		this.question = question;
 	}
 
 	
