@@ -11,10 +11,10 @@ $(document).ready(function() {
 
              	}
              	else if(respuesta.status == "NEW"){
-             		$('#respuesta .contenedor #contenidoPrincipal').append('<div id="lasrespuestas"><p>There are not answers for this Question.</p>'+'<p>Would you like to answer it?</p>'+'<div id="botonera"><a href="#responderPregunta" class="botonPreguntaGrande alLado">YES</a> <a href="#preguntar" class="botonPreguntaGrande alLado">NO</a></div></div> ');
+             		$('#respuesta .contenedor #contenidoPrincipal').append('<div id="lasrespuestas"><p>There are not answers for this Question.</p>'+'<p>Would you like to answer it?</p>'+'<div id="botonera"><a  data-ajax="false" href="responderPregunta.html" class="botonPreguntaGrande alLado">YES</a> <a  data-ajax="false" href="index.html" class="botonPreguntaGrande alLado">NO</a></div></div> ');
              	}
              	else if(respuesta.status == "INVALID"){
-             		$('#respuesta .contenedor #contenidoPrincipal').append('<div id="lasrespuestas"><p>Your question is invalid. Please go back and ask again</p>'+'<a href="#preguntar" class="botonPreguntaGrande alLado">GO BACK</a></div>');				
+             		$('#respuesta .contenedor #contenidoPrincipal').append('<div id="lasrespuestas"><p>Your question is invalid. Please go back and ask again</p>'+'<a  data-ajax="false" href="index.html" class="botonPreguntaGrande alLado">GO BACK</a></div>');				
              	}
 
 

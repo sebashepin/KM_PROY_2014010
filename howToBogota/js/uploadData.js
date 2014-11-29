@@ -4,7 +4,7 @@ $(document).ready(function(){
 		$('#preguntar .printResults').html("<b>Enviando...</b>");
 		//$.post('postReceiver.php', $(this).serialize(), function(data){
        $.post('rest/GetAnswer', $(this).serialize(), function(data){
-		   		$( "body" ).load( "respuesta.html" );
+		   		$( "body" ).load( "respuesta.html",data);
             $('#preguntar .printResults').html(data);             
         }).fail(function() {
 			 alert( "Envío fallido." );      
