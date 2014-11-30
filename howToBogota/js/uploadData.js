@@ -9,7 +9,7 @@ $(document).ready(function(){
 		if(respuesta.status == "OK"){
 			$('#respuesta').append('<div id="lasrespuestas"><div class="swiper-container"><div class="swiper-wrapper"><div class="swiper-slide">');
 			$('.swiper-slide').append('<p class="paso"><span class="textoPAso">STEP</span> <span class="numeroPaso">' + respuesta.step.step_id+ '</span></p>');
-			$('.swiper-slide').append('<p class="stepAnswer"> Description: ' + respuesta.step.step_description+ ' y mis vecinos son ' + respuesta.step.steps_neighborhood + '</p>');
+			$('.swiper-slide').append('<p class="stepAnswer">  ' + respuesta.step.step_description+ '</p>');
 			crearBotones(1, respuesta);
 			$('.contenedor').append('</div></div></div></div>');
 
@@ -109,7 +109,7 @@ var llamarSiguientePaso= function(pasoActual, stepId){
 				$.getJSON(rest, function(respuesta) {
 
 				$('.swiper-slide').animate({bottom:'-300px',opacity:'0'},(velocidad-200),function() { $('.swiper-slide').html('<p class="paso"><span class="textoPAso">STEP</span> <span class="numeroPaso">' + respuesta.step.step_id+ '</span></p>');
-					$('.swiper-slide').append('<p class="stepAnswer"> Description: ' + respuesta.step.step_description+ ' y mis vecinos son ' + respuesta.step.steps_neighborhood + '</p>');
+					$('.swiper-slide').append('<p class="stepAnswer">  ' + respuesta.step.step_description+ '</p>');
 					$('.swiper-slide').animate({bottom:'100px'},0);
 					$('.swiper-slide').animate({bottom:'0px',opacity:'1'},velocidad);
 					crearBotones(2, respuesta);    }   );
@@ -122,7 +122,7 @@ var llamarSiguientePaso= function(pasoActual, stepId){
 				$.getJSON(rest, function(respuesta) {
 				$('.swiper-slide').animate({left:'-300px',opacity:'0'},(velocidad-200),function() {
 					$('.swiper-slide').html('<p class="paso"><span class="textoPAso">STEP</span> <span class="numeroPaso">' + respuesta.step.step_id+ '</span></p>');
-					$('.swiper-slide').append('<p class="stepAnswer"> Description: ' + respuesta.step.step_description+ ' y mis vecinos son ' + respuesta.step.steps_neighborhood + '</p>');					
+					$('.swiper-slide').append('<p class="stepAnswer">  ' + respuesta.step.step_description+  '</p>');					
 					$('.swiper-slide').animate({left:'100px'},0);
 					$('.swiper-slide').animate({left:'0px',opacity:'1'},velocidad);
 					crearBotones(2, respuesta);
@@ -136,7 +136,7 @@ var llamarSiguientePaso= function(pasoActual, stepId){
 
 				$('.swiper-slide').animate({bottom:'300px',opacity:'0'},(velocidad-200),function() {
 					$('.swiper-slide').html('<p class="paso"><span class="textoPAso">STEP</span> <span class="numeroPaso">' + respuesta.step.step_id+ '</span></p>');
-					$('.swiper-slide').append('<p class="stepAnswer"> Description: ' + respuesta.step.step_description+ ' y mis vecinos son ' + respuesta.step.steps_neighborhood + '</p>');
+					$('.swiper-slide').append('<p class="stepAnswer">  ' + respuesta.step.step_description+  '</p>');
 					$('.swiper-slide').animate({bottom:'-100px'},0);
 					$('.swiper-slide').animate({bottom:'0px',opacity:'1'},velocidad);
 					crearBotones(2, respuesta);
@@ -151,7 +151,7 @@ var llamarSiguientePaso= function(pasoActual, stepId){
 				$.getJSON(rest, function(respuesta) {
 				$('.swiper-slide').animate({left:'600px',opacity:'0'},(velocidad-200),function() {
 					$('.swiper-slide').html('<p class="paso"><span class="textoPAso">STEP</span> <span class="numeroPaso">' + respuesta.step.step_id+ '</span></p>');
-					$('.swiper-slide').append('<p class="stepAnswer"> Description: ' + respuesta.step.step_description+ ' y mis vecinos son ' + respuesta.step.steps_neighborhood + '</p>');
+					$('.swiper-slide').append('<p class="stepAnswer"> ' + respuesta.step.step_description+ '</p>');
 					$('.swiper-slide').animate({left:'-100px'},0);
 					$('.swiper-slide').animate({left:'0px',opacity:'1'},velocidad);
 					crearBotones(2, respuesta);
@@ -172,7 +172,7 @@ if(pasoActual==2){
 
 			$('.swiper-slide').animate({bottom:'-300px',opacity:'0'},(velocidad-200),function() {
 				$('.swiper-slide').html('<p class="paso"><span class="textoPAso">STEP</span> <span class="numeroPaso">' + respuesta.step.step_id+ '</span></p>');
-			$('.swiper-slide').append('<p class="stepAnswer"> Description: ' + respuesta.step.step_description+ ' y mis vecinos son ' + respuesta.step.steps_neighborhood + '</p>');
+			$('.swiper-slide').append('<p class="stepAnswer"> ' + respuesta.step.step_description+  '</p>');
 			$('.swiper-slide').animate({bottom:'100px'},0);
 			$('.swiper-slide').animate({bottom:'0px',opacity:'1'},velocidad);
 			crearBotones(1, respuesta);
@@ -188,7 +188,7 @@ if(pasoActual==2){
 
 			$('.swiper-slide').animate({left:'-300px',opacity:'0'},(velocidad-200),function() {
 				$('.swiper-slide').html('<p class="paso"><span class="textoPAso">STEP</span> <span class="numeroPaso">' + respuesta.step.step_id+ '</span></p>');
-			$('.swiper-slide').append('<p class="stepAnswer"> Description: ' + respuesta.step.step_description+ ' y mis vecinos son ' + respuesta.step.steps_neighborhood + '</p>');
+			$('.swiper-slide').append('<p class="stepAnswer">  ' + respuesta.step.step_description+ '</p>');
 			$('.swiper-slide').animate({left:'100px'},0);
 			$('.swiper-slide').animate({left:'0px',opacity:'1'},velocidad);
 			crearBotones(1, respuesta);
@@ -203,7 +203,7 @@ if(pasoActual==2){
 				$.getJSON(rest, function(respuesta) {
 			$('.swiper-slide').animate({bottom:'300px',opacity:'0'},(velocidad-200),function() {
 $('.swiper-slide').html('<p class="paso"><span class="textoPAso">STEP</span> <span class="numeroPaso">' + respuesta.step.step_id+ '</span></p>');
-			$('.swiper-slide').append('<p class="stepAnswer"> Description: ' + respuesta.step.step_description+ ' y mis vecinos son ' + respuesta.step.steps_neighborhood + '</p>');
+			$('.swiper-slide').append('<p class="stepAnswer"> ' + respuesta.step.step_description+  '</p>');
 			$('.swiper-slide').animate({bottom:'-100px'},0);
 			$('.swiper-slide').animate({bottom:'0px',opacity:'1'},velocidad);
 			crearBotones(1, respuesta);
@@ -218,7 +218,7 @@ $('.swiper-slide').html('<p class="paso"><span class="textoPAso">STEP</span> <sp
 				
 			$('.swiper-slide').animate({left:'600px',opacity:'0'},(velocidad-200),function() {
 $('.swiper-slide').html('<p class="paso"><span class="textoPAso">STEP</span> <span class="numeroPaso">' + respuesta.step.step_id+ '</span></p>');
-			$('.swiper-slide').append('<p class="stepAnswer"> Description: ' + respuesta.step.step_description+ ' y mis vecinos son ' + respuesta.step.steps_neighborhood + '</p>');
+			$('.swiper-slide').append('<p class="stepAnswer"> ' + respuesta.step.step_description+  '</p>');
 			$('.swiper-slide').animate({left:'-100px'},0);
 			$('.swiper-slide').animate({left:'0px',opacity:'1'},velocidad);
 			crearBotones(1, respuesta);
