@@ -1,5 +1,7 @@
 package co.uniandes.howtobogota.ws;
 
+import java.util.List;
+
 import javax.ws.rs.DefaultValue;
 import javax.ws.rs.FormParam;
 import javax.ws.rs.GET;
@@ -8,7 +10,10 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
+import javax.ws.rs.core.Context;
+import javax.ws.rs.core.MultivaluedMap;
 import javax.ws.rs.core.Response;
+import javax.ws.rs.core.UriInfo;
 
 import co.uniandes.howtobogota.engine.AnswerResponse;
 import co.uniandes.howtobogota.engine.KES;
@@ -114,15 +119,12 @@ public class WSEndpoint {
   @Path("/CreateAndAnswerQuestion")
   @Produces("application/json")
   public boolean createAndAnswerQuestion(@FormParam("questionCreated") String question,
-      @FormParam("steps") String[] steps) {
-	  System.out.println(question+"\t"+steps.length);
-	  if(steps == null || steps.length == 0) {
-		  steps = new String[3];
-		  steps[0] = "First";
-		  steps[1] = "Second";
-		  steps[2] = "Third";
-	  }
+      @FormParam("steps") List<String> steps, @Context UriInfo info) {
+    String[] stepsArray = new String[steps.size()];
+    steps.toArray(stepsArray);
+    
+    
     KnowledgeEngine knowledgeEngine = KES.getInstance().getKnowledgeEngine();
-    return knowledgeEngine.createAndAnswerQuestion(question, steps);
+    return knowledgeEngine.createAndAnswerQuestion(question, steps.toArray());
   }
 }
